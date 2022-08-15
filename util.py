@@ -1,10 +1,18 @@
 import cv2
 
-capture = cv2.VideoCapture(1)
+capture = cv2.VideoCapture(0)
+W_View_size = 320
+H_View_size = int(W_View_size/1.333)
+FPS = 30
+capture.set(3, W_View_size)
+capture.set(4, H_View_size)
+capture.set(5, FPS)
+
+
 cw = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))  # 카메라 가로 크기
 ch = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))  # 카메라 세로 크기
-focus = {'x': cw//4, 'y': ch//4, 'w': cw//2,
-         'h': ch//2, 'cx': cw//2, 'cy': ch//2}  # 인식 영역
+focus = {'x': 0, 'y': 0, 'w': cw,
+         'h': ch, 'cx': cw//2, 'cy': ch//2}  # 인식 영역
 black_range = [(0, 0, 200), (179, 50, 255)]
 
 
