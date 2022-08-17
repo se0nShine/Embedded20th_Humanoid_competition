@@ -25,10 +25,10 @@ def getSubDegree(deg1, deg2):
 
 def detectAngle(img):
     global direction
-    mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)  # bgr에서 hsv로 변환
-    # black_range안에 있는것만 걸러낸다고 지정
+    mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)  
+    
     mask = cv2.inRange(mask, (15, 100, 0), (45, 255, 255))
-    img = cv2.bitwise_and(img, img, mask=mask)  # 채로 걸러낸다.
+    img = cv2.bitwise_and(img, img, mask=mask)  
 
     contours, _ = cv2.findContours(mask, 1, cv2.CHAIN_APPROX_NONE)
 

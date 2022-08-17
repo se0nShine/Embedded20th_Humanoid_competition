@@ -9,14 +9,14 @@ capture.set(4, H_View_size)
 capture.set(5, FPS)
 
 
-cw = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))  # 카메라 가로 크기
-ch = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))  # 카메라 세로 크기
+cw = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))  
+ch = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT)) 
 focus = {'x': 0, 'y': 0, 'w': cw,
-         'h': ch, 'cx': cw//2, 'cy': ch//2}  # 인식 영역
+         'h': ch, 'cx': cw//2, 'cy': ch//2} 
 black_range = [(0, 0, 200), (179, 50, 255)]
 
 
-def getColorObject(img, lower, upper):  # 특정 색상의 물체 위치를 찾는 함수
+def getColorObject(img, lower, upper):  
     mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(mask, lower, upper)
     img = cv2.bitwise_and(img, img, mask=mask)
@@ -47,12 +47,12 @@ def getColorObject(img, lower, upper):  # 특정 색상의 물체 위치를 찾�
     return rect
 
 
-def getBlackObject(img):  # 검은색 물체 위치를 찾는 함수
+def getBlackObject(img):  
     img = cv2.bitwise_not(img)
     return getColorObject(img, black_range[0], black_range[1])
 
 
-def drawRects(img, rects):  # 이미지에 사각형들을 그려주는 함수
+def drawRects(img, rects):  
     for rect in rects:
         pt1 = (focus['x']+int(rect['x']), focus['y']+int(rect['y']))
         pt2 = (pt1[0]+int(rect['w']), pt1[1]+int(rect['h']))

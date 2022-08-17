@@ -22,7 +22,7 @@ def detectAlpha(img):
     filename = "{}.png".format(os.getpid())
     cv2.imwrite(filename, img)
     text = pytesseract.image_to_string(
-        Image.open(filename), config="--psm 10", lang='eng')  # 이미지에서 문자를 인식해서 나온 결과를 text에 저장
+        Image.open(filename), config="--psm 10", lang='eng')
     os.remove(filename)
     try:
         if alphas.count(text[0]) > 0:
@@ -47,9 +47,9 @@ def getMessage(alpha, color):
 
 while True:
     input = cv2.waitKey(1)
-    _, img = capture.read()  # 카메라 캡쳐
+    _, img = capture.read()  
     img_focus = cv2.getRectSubPix(
-        img, (focus['w'], focus['h']), (focus['cx'], focus['cy']))  # 인식 영역만큼 자르기
+        img, (focus['w'], focus['h']), (focus['cx'], focus['cy'])) 
 
     rect_black = getBlackObject(img_focus)
     rect_blue = getColorObject(img_focus, (105, 50, 0), (135, 255, 255))
@@ -81,5 +81,5 @@ while True:
     #img = drawText(img, 9, 'Press enter to detect text.')
 
     cv2.rectangle(img, (focus['x'], focus['y']), (focus['x']+focus['w'], focus['y']+focus['h']),
-                  (255, 255, 255), 2)  # 인식 영역 표시하기
+                  (255, 255, 255), 2)  
     cv2.imshow("camera", img)

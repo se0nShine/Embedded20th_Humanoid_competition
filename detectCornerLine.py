@@ -30,10 +30,10 @@ def getSubDegree(deg1, deg2):
 
 def detectLine(img):
     global left, right, direction
-    mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)  # bgr에서 hsv로 변환
-#   black_range안에 있는것만 걸러낸다고 지정
+    mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)  
+
     mask = cv2.inRange(mask, (15, 100, 0), (45, 255, 255))
-    img = cv2.bitwise_and(img, img, mask=mask)  # 걸러낸다
+    img = cv2.bitwise_and(img, img, mask=mask)  
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     _, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 # Step 1: Create an empty skeleton
@@ -124,7 +124,7 @@ while True:
     input = cv2.waitKey(1)
     _, img = capture.read()
     img_focus = cv2.getRectSubPix(
-        img, (focus['w'], focus['h']), (focus['cx'], focus['cy']))  # 인식 영역만큼 자르기
+        img, (focus['w'], focus['h']), (focus['cx'], focus['cy'])) 
     rect = getColorObject(img_focus, (15, 100, 0), (45, 255, 255))
     if rect['w'] > 0:
         img_line = cv2.copyMakeBorder(
@@ -138,5 +138,5 @@ while True:
         img = drawText(img, 1, 'Left')
 
     cv2.rectangle(img, (focus['x'], focus['y']), (focus['x']+focus['w'], focus['y']+focus['h']),
-                  (255, 255, 255), 2)  # 인식 영역 표시하기
+                  (255, 255, 255), 2)  
     cv2.imshow("camera", img)

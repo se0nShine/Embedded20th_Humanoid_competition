@@ -8,9 +8,9 @@ color = ''
 
 while True:
     input = cv2.waitKey(1)
-    _, img = capture.read()  # 카메라 캡쳐
+    _, img = capture.read()  
     img_focus = cv2.getRectSubPix(
-        img, (focus['w'], focus['h']), (focus['cx'], focus['cy']))  # 인식 영역만큼 자르기
+        img, (focus['w'], focus['h']), (focus['cx'], focus['cy']))  
 
     rect_black = getBlackObject(img_focus)
     rect_blue = getColorObject(img_focus, (105, 50, 0), (135, 255, 255))
@@ -37,5 +37,5 @@ while True:
     img = drawText(img, 1, 'Color: '+str(color))
 
     cv2.rectangle(img, (focus['x'], focus['y']), (focus['x']+focus['w'], focus['y']+focus['h']),
-                  (255, 255, 255), 2)  # 인식 영역 표시하기
+                  (255, 255, 255), 2)  
     cv2.imshow("camera", img)
