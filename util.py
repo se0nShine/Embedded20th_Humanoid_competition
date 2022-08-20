@@ -1,22 +1,19 @@
 import cv2
 
 capture = cv2.VideoCapture(0)
-W_View_size = 320
-H_View_size = int(W_View_size/1.333)
 FPS = 30
-capture.set(3, W_View_size)
-capture.set(4, H_View_size)
 capture.set(5, FPS)
 
 
-cw = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))  
-ch = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT)) 
+cw = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+ch = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 focus = {'x': 0, 'y': 0, 'w': cw,
-         'h': ch, 'cx': cw//2, 'cy': ch//2} 
-black_range = [(0, 0, 200), (179, 50, 255)]
+         'h': ch, 'cx': cw//2, 'cy': ch//2}
+aaa=80
+black_range = [(0, 0, 200), (179, aaa, 255)]
 
 
-def getColorObject(img, lower, upper):  
+def getColorObject(img, lower, upper):
     mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(mask, lower, upper)
     img = cv2.bitwise_and(img, img, mask=mask)
@@ -47,12 +44,12 @@ def getColorObject(img, lower, upper):
     return rect
 
 
-def getBlackObject(img):  
+def getBlackObject(img):
     img = cv2.bitwise_not(img)
     return getColorObject(img, black_range[0], black_range[1])
 
 
-def drawRects(img, rects):  
+def drawRects(img, rects):
     for rect in rects:
         pt1 = (focus['x']+int(rect['x']), focus['y']+int(rect['y']))
         pt2 = (pt1[0]+int(rect['w']), pt1[1]+int(rect['h']))
