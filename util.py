@@ -9,7 +9,7 @@ cw = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
 ch = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 focus = {'x': 0, 'y': 0, 'w': cw,
          'h': ch, 'cx': cw//2, 'cy': ch//2}
-aaa=80
+aaa = 80
 black_range = [(0, 0, 200), (179, aaa, 255)]
 
 
