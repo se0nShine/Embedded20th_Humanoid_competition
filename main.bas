@@ -48,7 +48,7 @@ CONST 좌우기울기AD포트 = 1
 CONST 기울기확인시간 = 20  'ms
 
 CONST 적외선AD포트  = 4
-
+7
 
 CONST min = 61	'뒤로넘어졌을때
 CONST max = 107	'앞으로넘어졌을때
@@ -114,21 +114,112 @@ PRINT "SOUND 12 !" '안녕하세요
 
 GOSUB All_motor_mode3
 
-GOTO MAIN	'시리얼 수신 루틴으로 
+
 '************************************************
 DIM 반복횟수 AS BYTE
+DIM arrow AS INTEGER
+arrow=0
+DIM dis AS INTEGER
+DIM dis_old AS INTEGER
+dis=0
+dis_old=0
+DIM go AS BYTE
+go=0
+
+
+GOTO MAIN	'시리얼 수신 루틴으
+
 MAIN:
-    ERX 4800,A,MAIN
-    A_old = A
-    IF A = 1 THEN
-        보행횟수 = 3         
-        GOTO 전진횟수보행50     
-    ELSE
-        MUSIC "F"     
-    
+	IF go=0 THEN
+		ERX 4800,A,MAIN
+		IF A=128  THEN
+			PRINT "SOUND 12 !"
+			go=1
+		ENDIF
+	ENDIF
+	
+    IF arrow=0 THEN
+    	dis_old=dis
+    	dis=0
+    	GOSUB 적외선거리센서확인
+    	IF dis>50 THEN
+    		GOSUB 기본자세
+    		ETX 4800,151
+    		GOTO CHECKALPHA
+    	ELSE
+    		IF dis_old>50 THEN
+    			MOVE G6C,100,  30,  80, 100, 25, 100
+    		ENDIF
+    		ETX 4800,150
+    		GOTO CHECKLINE
+    	ENDIF
+ 
     ENDIF
     
     GOTO MAIN
+
+CHECKLINE:
+	
+	ERX 4800,A,CHECKLINE
+	A_old = A
+	
+	
+	IF A=160 THEN
+   		보행횟수= 1
+     	GOTO 전진횟수보행50
+    ELSEIF A=161 THEN
+    	GOTO 왼쪽턴10
+    ELSEIF A=162 THEN
+    	GOTO 오른쪽턴10
+	ELSEIF A=163 THEN
+    	GOTO 연속왼쪽옆으로70
+    ELSEIF A=164 THEN
+    	GOTO 연속오른쪽옆으로70
+    ELSE
+    	GOTO MAIN
+	ENDIF
+	
+
+CHECKALPHA:
+	ERX 4800,A,CHECKLINE
+	
+	IF A=140 THEN
+     	GOTO East
+    ELSEIF A=141 THEN
+    	GOTO West
+    ELSEIF A=142 THEN
+    	GOTO South
+	ELSEIF A=143 THEN
+    	GOTO North
+    ELSE
+    	GOTO MAIN
+	ENDIF
+    
+East:
+	MOVE G6A,100, 56, 182, 76, 100, 100
+    MOVE G6D,100, 56, 182, 76, 100, 100
+    MOVE G6B,100,  30,  80
+	MOVE G6C,190,  30,  80
+	GOTO MAIN
+West:
+	MOVE G6A,100, 56, 182, 76, 100, 100
+    MOVE G6D,100, 56, 182, 76, 100, 100
+    MOVE G6B,190,  30,  80
+	MOVE G6C,100,  30,  80
+	GOTO MAIN
+North:
+	MOVE G6A,100, 56, 182, 76, 100, 100
+    MOVE G6D,100, 56, 182, 76, 100, 100
+    MOVE G6B,190,  30,  80
+	MOVE G6C,190,  30,  80
+	GOTO MAIN
+South:
+	MOVE G6A,100, 56, 182, 76, 100, 100
+    MOVE G6D,100, 56, 182, 76, 100, 100
+    MOVE G6B,10,  30,  80
+	MOVE G6C,10,  30,  80
+	GOTO MAIN
+    
     '************************************* 
 전진횟수보행50:
     반복횟수 = 0
@@ -139,7 +230,7 @@ MAIN:
         MOVE G6A, 88,  71, 152,  91, 110
         MOVE G6D,108,  76, 146,  93,  94
         MOVE G6B,100,35
-        MOVE G6C,100,35         
+        MOVE G6C,100,35,80, 100, 25, 100     
         WAIT
         SPEED 10'보행속도         '왼발들기
         MOVE G6A, 90, 100, 115, 105, 114
@@ -153,7 +244,7 @@ MAIN:
         SPEED 3         '왼쪽기울기
         MOVE G6D,  88,  71, 152,  91, 110
         MOVE G6A, 108,  76, 146,  93,  94
-        MOVE G6C, 100,35
+        MOVE G6C, 100,35,80, 100, 25, 100
         MOVE G6B, 100,35
         WAIT
         SPEED 10'보행속도         '오른발들기
@@ -192,7 +283,7 @@ MAIN:
         MOVE G6C, 100,35
         WAIT
         SPEED 3
-        GOSUB 기본자세         
+        'GOSUB 기본자세         
         GOSUB Leg_motor_mode1
         GOTO MAIN     
     ENDIF
@@ -225,11 +316,157 @@ MAIN:
         MOVE G6B, 100,35
         WAIT
         SPEED 3
-        GOSUB 기본자세     
+        'GOSUB 기본자세     
         GOSUB Leg_motor_mode1         
         GOTO MAIN
     ENDIF
     GOTO 전진횟수보행50_1
+    '*********************************************
+왼쪽턴10:
+    MOTORMODE G6A,3,3,3,3,2
+    MOTORMODE G6D,3,3,3,3,2
+    SPEED 5
+    MOVE G6A,97,  86, 145,  83, 103, 100
+    MOVE G6D,97,  66, 145,  103, 103, 100
+    WAIT
+
+    SPEED 12
+    MOVE G6A,94,  86, 145,  83, 101, 100
+    MOVE G6D,94,  66, 145,  103, 101, 100
+    WAIT
+
+    SPEED 6
+    MOVE G6A,101,  76, 146,  93, 98, 100
+    MOVE G6D,101,  76, 146,  93, 98, 100
+    WAIT
+    DELAY 300
+    'ERX 4800,A,왼쪽턴10     
+    'IF A <> A_old THEN
+    	
+     '   GOTO MAIN     
+    'ENDIF
+  	GOTO MAIN
+    GOTO 왼쪽턴10
+
+    '**********************************************
+오른쪽턴10:
+    MOTORMODE G6A,3,3,3,3,2
+    MOTORMODE G6D,3,3,3,3,2
+    SPEED 5
+    MOVE G6A,97,  66, 145,  103, 103, 100
+    MOVE G6D,97,  86, 145,  83, 103, 100
+    WAIT
+
+    SPEED 12
+    MOVE G6A,94,  66, 145,  103, 101, 100
+    MOVE G6D,94,  86, 145,  83, 101, 100
+    WAIT
+    SPEED 6
+    MOVE G6A,101,  76, 146,  93, 98, 100
+    MOVE G6D,101,  76, 146,  93, 98, 100
+    WAIT
+    DELAY 300
+    'ERX 4800,A,오른쪽턴10
+    'IF A <> A_old THEN
+    	
+     '   GOTO MAIN     
+    'ENDIF
+    GOTO MAIN
+    GOTO 오른쪽턴10
+    
+    '********************************************** 
+왼쪽턴20:
+    GOSUB Leg_motor_mode2     
+    SPEED 8
+    MOVE G6A,95,  96, 145,  73, 105, 100
+    MOVE G6D,95,  56, 145,  113, 105, 100
+    MOVE G6B,110
+    MOVE G6C,90
+    WAIT     
+    SPEED 12
+    MOVE G6A,93,  96, 145,  73, 105, 100     
+    MOVE G6D,93,  56, 145,  113, 105, 100     
+    WAIT
+    SPEED 6
+    MOVE G6A,101,  76, 146,  93, 98, 100
+    MOVE G6D,101,  76, 146,  93, 98, 100
+    MOVE G6B,100,  30,  80
+    MOVE G6C,100,  30,  80
+    WAIT
+    GOSUB Leg_motor_mode1     
+    GOTO MAIN
+
+'********************************************** 
+오른쪽턴20:
+    GOSUB Leg_motor_mode2     
+    SPEED 8
+    MOVE G6A,95,  56, 145,  113, 105, 100
+    MOVE G6D,95,  96, 145,  73, 105, 100
+    MOVE G6B,90
+    MOVE G6C,110
+    WAIT     
+    SPEED 12
+    MOVE G6A,93,  56, 145,  113, 105, 100     
+    MOVE G6D,93,  96, 145,  73, 105, 100     
+    WAIT
+    SPEED 6
+    MOVE G6A,101,  76, 146,  93, 98, 100
+    MOVE G6D,101,  76, 146,  93, 98, 100
+    MOVE G6B,100,  30,  80
+    MOVE G6C,100,  30,  80
+    WAIT
+    GOSUB Leg_motor_mode1     
+    GOTO MAIN
+    '**********************************************
+연속오른쪽옆으로70:
+    SPEED 5
+    MOVE G6D, 90,  90, 120, 105, 110, 100
+    MOVE G6A,100,  76, 146,  93, 107, 100
+    MOVE G6B,100,  40
+    MOVE G6C,100,  40
+    WAIT     
+    SPEED 5
+    MOVE G6D, 102,  76, 147, 93, 100, 100     
+    MOVE G6A,83,  78, 140,  96, 115, 100     
+    WAIT
+    SPEED 5
+    MOVE G6D,98,  76, 146,  93, 100, 100     
+    MOVE G6A,98,  76, 146,  93, 100, 100     
+    WAIT
+    SPEED 5
+    MOVE G6A,100,  76, 145,  93, 100, 100     
+    MOVE G6D,100,  76, 145,  93, 100, 100     
+    WAIT
+    DELAY 300 
+    GOTO MAIN     
+    GOTO 연속오른쪽옆으로70     
+ 	 '*************
+연속왼쪽옆으로70:     
+	SPEED 5
+    MOVE G6A, 90,  90, 120, 105, 110, 100
+    MOVE G6D,100,  76, 146,  93, 107, 100
+    MOVE G6B,100,  40
+    MOVE G6C,100,  40
+    WAIT     
+    SPEED 5
+    MOVE G6A, 102,  76, 147, 93, 100, 100     
+    MOVE G6D,83,  78, 140,  96, 115, 100     
+    WAIT
+    SPEED 5
+    MOVE G6A,98,  76, 146,  93, 100, 100     
+    MOVE G6D,98,  76, 146,  93, 100, 100     
+    WAIT
+    SPEED 5
+    MOVE G6A,100,  76, 145,  93, 100, 100     
+    MOVE G6D,100,  76, 145,  93, 100, 100     
+    WAIT
+    DELAY 300 
+                
+    GOTO MAIN     
+    GOTO 연속왼쪽옆으로70
+'************************************************  
+    
+    
     
 	'************************************* 
 Leg_motor_mode3:
@@ -237,6 +474,13 @@ Leg_motor_mode3:
     MOTORMODE G6D,3,3,3,3,3     
     RETURN
     '*************************************
+ 
+Leg_motor_mode2:
+    MOTORMODE G6A,2,2,2,2,2     
+    MOTORMODE G6D,2,2,2,2,2
+    RETURN
+
+ '*************************************
 Leg_motor_mode1:
     MOTORMODE G6A,1,1,1,1,1     
     MOTORMODE G6D,1,1,1,1,1     
@@ -389,8 +633,6 @@ All_motor_mode3:
 
     GYROSET G6A, 0, 0, 0, 0, 0
     GYROSET G6D, 0, 0, 0, 0, 0
-
-
     자이로ONOFF = 0
     RETURN
 
@@ -404,4 +646,13 @@ All_motor_mode3:
 종료음:
     TEMPO 220
     MUSIC "O38GD<BGD<BG"
+    RETURN
+적외선거리센서확인:
+    적외선거리값 = AD(적외선AD포트)
+    IF 적외선거리값 > 50 THEN '50 = 적외선거리값 = 25cm
+    	dis=적외선거리값
+        MUSIC "C"
+        DELAY 200
+    ENDIF
+
     RETURN
