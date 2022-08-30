@@ -200,24 +200,28 @@ East:
     MOVE G6D,100, 56, 182, 76, 100, 100
     MOVE G6B,100,  30,  80
 	MOVE G6C,190,  30,  80
+	WAIT
 	GOTO MAIN
 West:
 	MOVE G6A,100, 56, 182, 76, 100, 100
     MOVE G6D,100, 56, 182, 76, 100, 100
     MOVE G6B,190,  30,  80
 	MOVE G6C,100,  30,  80
+	WAIT
 	GOTO MAIN
 North:
 	MOVE G6A,100, 56, 182, 76, 100, 100
     MOVE G6D,100, 56, 182, 76, 100, 100
     MOVE G6B,190,  30,  80
 	MOVE G6C,190,  30,  80
+	WAIT
 	GOTO MAIN
 South:
 	MOVE G6A,100, 56, 182, 76, 100, 100
     MOVE G6D,100, 56, 182, 76, 100, 100
     MOVE G6B,10,  30,  80
 	MOVE G6C,10,  30,  80
+	WAIT
 	GOTO MAIN
     
     '************************************* 
