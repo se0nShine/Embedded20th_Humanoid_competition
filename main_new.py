@@ -2,7 +2,10 @@ import serial
 import cv2
 import os
 import pytesseract
+import math
+import numpy
 from PIL import Image
+
 
 ser = serial.Serial('/dev/ttyS0', 4800, timeout=0.01)
 cap = cv2.VideoCapture(0)
@@ -11,6 +14,17 @@ cap.set(4, int(320/1.333))
 cap.set(5, 30)  # FPS 30으로 설정
 yellow_range = [(15, 100, 0), (45, 455, 455)]
 black_range = [(0, 0, 200), (179, 80, 255)]
+
+
+def getDegree(p1, p2):
+    rad = math.atan(float(p2[1]-p1[1])/(p2[0]-p1[0]))
+    return round(rad*(180/(numpy.pi)), 3)
+
+
+def getSubDegree(deg1, deg2):
+    ang1 = max(deg1, deg2)-min(deg1, deg2)
+    ang2 = 180-ang1
+    return min(ang1, ang2)
 
 
 # 로보베이직으로 값을 보냄
