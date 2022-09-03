@@ -113,7 +113,7 @@ def detectDirection(alpha):
     elif alpha == 'N':
         TX_data_py2(serial_port, 143)
     else:
-        TX_data_py2(serial_port, 151)
+        TX_data_py2(serial_port, 144)
 
 
 def detectArrow(img):
@@ -128,6 +128,7 @@ def detectArrow(img):
 
     if lines is None:
         direction = ''
+        TX_data_py2(serial_port, 122)
         return
     temp = []
     for line in lines:
@@ -139,10 +140,13 @@ def detectArrow(img):
 
     if (ang1 > np.pi/8 and ang1 < 3*np.pi/8):
         direction = 'Right'
+        TX_data_py2(serial_port, 120)
     elif (ang1 < -np.pi/8 and ang1 > -3*np.pi/8):
         direction = 'Left'
+        TX_data_py2(serial_port, 121)
     else:
         direction = ''
+        TX_data_py2(serial_port, 122)
 
     img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
     cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 3, cv2.LINE_AA)
@@ -205,22 +209,22 @@ while True:
             detectAlpha(img_alpha)
             color = 'Black'
             detectDirection(alpha)
+        else:
+            TX_data_py2(serial_port, 144)
 
         if alpha != '' and color != '':
             img = drawText(img, 1, 'Text: '+alpha)
             img = drawText(img, 2, 'Color: '+color)
-        head_rotate = head_rotate+1
     elif tmp == 152:
-        _, img = capture.read()
-        img_focus = cv2.getRectSubPix(
-            img, (focus['w'], focus['h']), (focus['cx'], focus['cy']))
-        rect = getBlackObject(img_focus)
+        rect = getBlackObject(img)
 
         if rect['w'] > 0:
-            img_arrow = cv2.getRectSubPix(img_focus, (int(rect['w']), int(
+            img_arrow = cv2.getRectSubPix(img, (int(rect['w']), int(
                 rect['h'])), (int(rect['cx']), int(rect['cy'])))
             img = drawRects(img, [rect])
             detectArrow(img_arrow)
+        else:
+            TX_data_py2(serial_port, 122)
 
         if direction != '':
             img = drawText(img, 1, 'Move '+direction)
