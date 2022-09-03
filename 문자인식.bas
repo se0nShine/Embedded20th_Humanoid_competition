@@ -142,18 +142,21 @@ MAIN:
 		ENDIF
 	ENDIF
 	
+	
     IF arrow=0 THEN
     	dis_old=dis
     	dis=0
     	GOSUB 적외선거리센서확인
  
+ 
     	IF dis>50 THEN
     		GOSUB 기본자세
     		GOSUB 고개들기
     		ETX 4800,151
-    		GOTO CHECKALPHA
+    		GOSUB CHECKALPHA
+    		GOSUB 고개내리기
     		ETX 4800,152
-    		GOTO CHECKARROW
+    		GOSUB CHECKARROW
     		MOVE G6C,100,  30,  80, 100, 25, 100
     		arrow=1
     	ELSE
@@ -187,7 +190,11 @@ CHECKLINE:
     	GOTO 연속왼쪽옆으로70
     ELSEIF A=164 THEN
     	GOTO 연속오른쪽옆으로70
+    ELSEIF A=165 THEN
+    	보행횟수= 4
+     	GOTO 전진횟수보행50
     ELSE
+    
     	GOTO MAIN
 	ENDIF
 	
@@ -195,14 +202,14 @@ CHECKLINE:
 CHECKARROW:
 	ERX 4800,A,CHECKARROW
 	IF A=120 THEN
-     	GOTO MAIN
+     	GOSUB 오른쪽턴90
     ELSEIF A=121 THEN
-    	GOTO MAIN
-    ELSEIF A=122 THEN
-    	GOTO CHECKARROW
+    	GOSUB 왼쪽턴90
     ELSE
-    	GOTO MAIN
+    	ETX 4800,152
+    	GOSUB CHECKARROW
 	ENDIF
+	RETURN
 
 
 	
@@ -210,18 +217,21 @@ CHECKARROW:
 CHECKALPHA:
 	ERX 4800,A,CHECKALPHA
 	IF A=140 THEN
-     	GOTO East
+     	GOSUB East
     ELSEIF A=141 THEN
-    	GOTO West
+    	GOSUB West
     ELSEIF A=142 THEN
-    	GOTO South
+    	GOSUB South
 	ELSEIF A=143 THEN
-    	GOTO North
-    ELSE IF A=144 THEN
-    	GOTO CHECKALPHA
+    	GOSUB North
     ELSE
-    	GOTO MAIN
-	ENDIF
+    	ETX 4800,151
+    	GOSUB CHECKALPHA
+    ENDIF
+    RETURN
+    
+    
+    
 CHECKHEAD:
 	ERX 4800,A,CHECKHEAD
 	IF A = 170 THEN
@@ -242,28 +252,28 @@ East:
     MOVE G6B,100,  30,  80
 	MOVE G6C,190,  30,  80
 	WAIT
-	GOTO MAIN
+	RETURN
 West:
 	MOVE G6A,100, 56, 182, 76, 100, 100
     MOVE G6D,100, 56, 182, 76, 100, 100
     MOVE G6B,190,  30,  80
 	MOVE G6C,100,  30,  80
 	WAIT
-	GOTO MAIN
+	RETURN
 North:
 	MOVE G6A,100, 56, 182, 76, 100, 100
     MOVE G6D,100, 56, 182, 76, 100, 100
     MOVE G6B,190,  30,  80
 	MOVE G6C,190,  30,  80
 	WAIT
-	GOTO MAIN
+	RETURN
 South:
 	MOVE G6A,100, 56, 182, 76, 100, 100
     MOVE G6D,100, 56, 182, 76, 100, 100
     MOVE G6B,10,  30,  80
 	MOVE G6C,10,  30,  80
 	WAIT
-	GOTO MAIN
+	RETURN
     
     '************************************* 
 전진횟수보행50:
@@ -707,4 +717,96 @@ All_motor_mode3:
 	WAIT
 	SPEED 2
 	MOVE G6C,100, 30, 80, 100, 120, 100
+	WAIT
 	RETURN
+	
+고개내리기:
+	SPEED 2
+	MOVE G6C,100,  30,  80, 100, 100, 100
+	WAIT
+	SPEED 2
+	MOVE G6C,100, 30, 80, 100, 70, 100
+	WAIT
+	RETURN
+	
+왼쪽턴90:
+    GOSUB Leg_motor_mode2     
+    SPEED 8
+    MOVE G6A,95,  106, 145,  63, 105, 100
+    MOVE G6D,95,  46, 145,  123, 105, 100
+    MOVE G6B,115
+    MOVE G6C,85
+    WAIT     
+    
+    SPEED 10
+    MOVE G6A,93,  106, 145,  63, 105, 100     
+    MOVE G6D,93,  46, 145,  123, 105, 100     
+    WAIT
+    
+    SPEED 8
+    GOSUB 기본자세
+    GOSUB Leg_motor_mode1     
+    
+    '한번 더 
+    GOSUB Leg_motor_mode2     
+    SPEED 8
+    MOVE G6A,95,  106, 145,  63, 105, 100
+    MOVE G6D,95,  46, 145,  123, 105, 100
+    MOVE G6B,115
+    MOVE G6C,85
+    WAIT     
+    
+    SPEED 10
+    MOVE G6A,93,  106, 145,  63, 105, 100     
+    MOVE G6D,93,  46, 145,  123, 105, 100     
+    WAIT
+    
+    SPEED 8
+   	GOSUB 기본자세
+    GOSUB Leg_motor_mode1 
+    
+    
+    
+    RETURN
+    
+    '********************************************** 
+오른쪽턴90:
+    GOSUB Leg_motor_mode2     
+    SPEED 8
+    MOVE G6A,95,  46, 145,  123, 105, 100
+    MOVE G6D,95,  106, 145,  63, 105, 100
+    MOVE G6C,115
+    MOVE G6B,85
+    WAIT     
+    
+    SPEED 10
+    MOVE G6A,93,  46, 145,  123, 105, 100     
+    MOVE G6D,93,  106, 145,  63, 105, 100     
+    WAIT
+    
+    SPEED 8
+   
+   	GOSUB 기본자세
+    GOSUB Leg_motor_mode1     
+    
+    '한번 더
+    GOSUB Leg_motor_mode2     
+    SPEED 8
+    MOVE G6A,95,  46, 145,  123, 105, 100
+    MOVE G6D,95,  106, 145,  63, 105, 100
+    MOVE G6C,115
+    MOVE G6B,85
+    WAIT     
+    
+    SPEED 10
+    MOVE G6A,93,  46, 145,  123, 105, 100     
+    MOVE G6D,93,  106, 145,  63, 105, 100     
+    WAIT
+    
+    SPEED 8
+    
+    GOSUB 기본자세
+    GOSUB Leg_motor_mode1 
+    
+    RETURN
+    '**********************************************
