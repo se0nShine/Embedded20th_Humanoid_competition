@@ -9,8 +9,9 @@ from PIL import Image
 
 ser = serial.Serial('/dev/ttyS0', 4800, timeout=0.01)
 cap = cv2.VideoCapture(0)
-cap.set(3, 320)
-cap.set(4, int(320/1.333))
+viewSize = (320, int(320/1.333))
+cap.set(3, viewSize[0])
+cap.set(4, viewSize[1])
 cap.set(5, 30)  # FPS 30으로 설정
 yellow_range = [(15, 100, 0), (45, 455, 455)]
 black_range = [(0, 0, 200), (179, 80, 255)]
@@ -30,13 +31,15 @@ def getSubDegree(deg1, deg2):
 # 로보베이직으로 값을 보냄
 def sendTX(data):
     ser.write(serial.to_bytes([data]))
-    print("send", data)
+    print("send data:", data)
 
 
 # 로보베이직에서 보낸 데이터 값을 받아옴
 def receiveRX():
     if ser.inWaiting() > 0:
-        return ord(ser.read(1))
+        rx = ord(ser.read(1))
+        print("receive data:", rx)
+        return rx
     else:
         return 0
 
@@ -47,6 +50,7 @@ def receiveRX():
 # 163,164: 좌우 이동 필요
 # 165: 선 못찾음, 오류 발생
 def traceLine(img):
+    res = img
     mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(mask, yellow_range[0], yellow_range[1])
     img = cv2.bitwise_and(img, img, mask=mask)
@@ -58,6 +62,8 @@ def traceLine(img):
             cx = int(M['m10']/M['m00'])
             _, cols = img.shape[:2]
             [vx, vy, x, y] = cv2.fitLine(c, cv2.DIST_L2, 0, 0.01, 0.01)
+            cv2.line(res, (cx, 0), (cx, viewSize[1]), (0, 0, 255), 3)
+            cv2.drawContours(res, c, -1, (0, 255, 0), 2)
             try:
                 y1 = int((-x*vy/vx)+y)
                 y2 = int(((cols-x)*vy/vx)+y)
@@ -67,6 +73,9 @@ def traceLine(img):
                     deg = resultDeg
                 else:
                     deg = -resultDeg
+
+                cv2.putText(res, str(deg), (0, 50), 0, 1, (0, 255, 0), 2)
+                cv2.imshow("traceLine", res)
 
                 if deg <= -10:
                     return 162
@@ -82,14 +91,16 @@ def traceLine(img):
             except Exception as e:
                 print(e)
             finally:
+                cv2.imshow("traceLine", res)
                 return 165
     return 165
 
 
-# 문자인식 영상처리
+# 방향인식 영상처리
 # 140~143: 동쪽 서쪽 남쪽 북쪽인식
 # 144: 문자못찾음 또는 오류발생
 def detectDirection(img):
+    res = img
     img = cv2.bitwise_not(img)
     mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(mask, black_range[0], black_range[1])
@@ -110,6 +121,8 @@ def detectDirection(img):
             'cx': x + (w / 2),
             'cy': y + (h / 2)
         }
+        cv2.rectangle(res, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
         img = cv2.getRectSubPix(img, (int(rect['w']), int(
             rect['h'])), (int(rect['cx']), int(rect['cy'])))
         _, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
@@ -122,19 +135,69 @@ def detectDirection(img):
         os.remove(filename)
         try:
             if alphas.count(text[0]) > 0:
+                cv2.putText(res, text[0], (0, 50), 0, 1, (0, 255, 0), 2)
+                cv2.imshow("detectDirection", res)
                 return txs[text[0]]
-        except:
+        except Exception as e:
+            print(e)
+        finally:
+            cv2.imshow("detectDirection", res)
             return 144
     return 144
+
+
+# 화살표인식
+# 120,121: 왼쪽,오른쪽
+# 122: 화살표인식 못함
+def detectArrow(img):
+    res = img
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    _, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    img = cv2.copyMakeBorder(
+        img, 50, 50, 50, 50, cv2.BORDER_CONSTANT, value=(255, 255, 255))
+
+    img = cv2.Canny(img, 200, 200)
+    lines = cv2.HoughLinesP(img, rho=1, theta=numpy.pi/180.0, threshold=30)
+
+    if lines is None:
+        cv2.putText(res, '', (0, 50), 0, 1, (0, 255, 0), 2)
+        cv2.imshow("traceLine", res)
+        return 122
+    temp = []
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        temp.append(line[0])
+    x1, y1, x2, y2 = min(temp, key=lambda l: min(l[1], l[3]))
+
+    ang1 = math.atan(float(y2-y1)/(x2-x1))
+
+    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    cv2.line(res, (x1, y1), (x2, y2), (0, 255, 0), 3, cv2.LINE_AA)
+
+    if (ang1 > numpy.pi/8 and ang1 < 3*numpy.pi/8):
+        cv2.putText(res, 'Left', (0, 50), 0, 1, (0, 255, 0), 2)
+        cv2.imshow("traceLine", res)
+        return 120
+    elif (ang1 < -numpy.pi/8 and ang1 > -3*numpy.pi/8):
+        cv2.putText(res, 'Right', (0, 50), 0, 1, (0, 255, 0), 2)
+        cv2.imshow("traceLine", res)
+        return 121
+    else:
+        cv2.putText(res, '', (0, 50), 0, 1, (0, 255, 0), 2)
+        cv2.imshow("traceLine", res)
+        return 122
+
+
+actionFunc = {150: traceLine, 151: detectDirection, 152: detectArrow}
 
 
 while True:
     cv2.waitKey(1)
     _, img = cap.read()
     rx = receiveRX()
-    print("receive", rx)
-    if rx == 150:
-        sendTX(traceLine(img.copy()))
-    elif rx == 151:
-        sendTX(detectDirection(img.copy()))
+    try:
+        tx = actionFunc[rx](img)
+        sendTX(tx)
+    except Exception as e:
+        print(e)
     cv2.imshow("camera", img)
