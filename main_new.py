@@ -76,10 +76,12 @@ def traceLine(img):
 
                 cv2.putText(res, str(deg), (0, 50), 0, 1, (0, 255, 0), 2)
                 cv2.imshow("traceLine", res)
-
+                
                 if deg <= -10:
+                    print(deg)
                     return 162
                 elif deg >= 10:
+                    print(deg)
                     return 161
                 else:
                     if cx <= 120:
@@ -90,9 +92,10 @@ def traceLine(img):
                         return 160
             except Exception as e:
                 print(e)
+                return 165
             finally:
                 cv2.imshow("traceLine", res)
-                return 165
+                
     return 165
 
 
@@ -191,6 +194,7 @@ def detectArrow(img):
 actionFunc = {150: traceLine, 151: detectDirection, 152: detectArrow}
 
 
+sendTX(128)
 while True:
     cv2.waitKey(1)
     _, img = cap.read()

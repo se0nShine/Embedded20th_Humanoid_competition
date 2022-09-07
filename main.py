@@ -35,7 +35,6 @@ def RX_data(ser):
 
 serial_port = serial.Serial('/dev/ttyS0', BPS, timeout=0.01)
 TX_data_py2(serial_port, 128)
-head_rotate = 170
 
 
 def getDegree(p1, p2):
@@ -56,10 +55,13 @@ def getSubDegree(deg1, deg2):
 
 
 def linetracing(direction):
-    if float(direction) <= -10:
+    if abs(float(direction))>=70:
+        return 165 
+    elif float(direction) <= -10:
         return 162
     elif float(direction) >= 10:
         return 161
+    
     else:
         if cx <= 120:
             return 163
@@ -199,7 +201,6 @@ while True:
             TX_data_py2(serial_port, 159)
 
     elif tmp == 151:
-        TX_data_py2(serial_port, head_rotate)
         rect = getBlackObject(img)
 
         if rect['w'] > 0:
