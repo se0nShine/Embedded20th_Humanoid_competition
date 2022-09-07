@@ -1,3 +1,9 @@
+def detectLine(img):
+    tx=detectCorner(img)
+    if tx==133:
+        return traceLine(img)
+    return tx
+
 def detectCorner(img):
     open = cv2.morphologyEx(img, cv2.MORPH_OPEN, element)
     temp = cv2.subtract(img, open)
@@ -56,13 +62,13 @@ def detectCorner(img):
         right = right_deg >= 15 and right_deg <= 75
         
         if right and left:
-            return #앞으로 세발자국 걷기
+            return 130
         elif right and not(left):
-            return #고개들어서 왼쪽으로 45도턴하고 고개내려서 위험지역인지 안전지역인지 판단
+            return 131
         elif not(right) and left:
-            return #고개들어서 오른쪽으로 45도턴하고 고개내려서 위험지역인지 안전지역인지 판단
+            return 132
         else:
-            return #라인트레이싱
+            return 133
         
         if not math.isnan(print_deg):
             cv2.line(cdstP, (stn[0], stn[1]), (stn[2], stn[3]),
