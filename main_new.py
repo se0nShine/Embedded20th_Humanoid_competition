@@ -146,9 +146,10 @@ def detectDirection(img):
         except Exception as e:
             if str(e) !='0':
                 print('error: ',e)
+            return 144
         finally:
             cv2.imshow("detectDirection", res)
-            return 144
+            
     return 144
 
 
@@ -174,17 +175,20 @@ def detectArrow(img):
         x1, y1, x2, y2 = line[0]
         temp.append(line[0])
     x1, y1, x2, y2 = min(temp, key=lambda l: min(l[1], l[3]))
+    x3, y3, x4, y4 = max(temp, key =lambda l: max(l[1], l[3]))
 
     ang1 = math.atan(float(y2-y1)/(x2-x1))
+    ang2 = math.atan(float(y2-y1)/(x2-x1))
 
     img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
     cv2.line(res, (x1, y1), (x2, y2), (0, 255, 0), 3, cv2.LINE_AA)
+    cv2.line(res, (x3, y3), (x4, y4), (0, 255, 0), 3, cv2.LINE_AA)
 
-    if (ang1 > numpy.pi/8 and ang1 < 3*numpy.pi/8):
+    if (ang1 > numpy.pi/8 and ang1 < 3*numpy.pi/8) and (ang2 < -numpy.pi/8 and ang2 > -3*numpy.pi/8):
         cv2.putText(res, 'Left', (0, 50), 0, 1, (0, 255, 0), 2)
         cv2.imshow("traceLine", res)
         return 120
-    elif (ang1 < -numpy.pi/8 and ang1 > -3*numpy.pi/8):
+    elif (ang1 < -numpy.pi/8 and ang1 > -3*numpy.pi/8) and (ang2 > numpy.pi/8 and ang2< 3*numpy.pi/8):
         cv2.putText(res, 'Right', (0, 50), 0, 1, (0, 255, 0), 2)
         cv2.imshow("traceLine", res)
         return 121
@@ -192,7 +196,6 @@ def detectArrow(img):
         cv2.putText(res, '', (0, 50), 0, 1, (0, 255, 0), 2)
         cv2.imshow("traceLine", res)
         return 122
-        
 
 
 
