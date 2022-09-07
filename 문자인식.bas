@@ -109,7 +109,7 @@ GOSUB 자이로ON
 
 
 
-PRINT "VOLUME 200 !"
+PRINT "VOLUME 100 !"
 PRINT "SOUND 12 !" '안녕하세요
 
 GOSUB All_motor_mode3
@@ -118,7 +118,7 @@ GOSUB All_motor_mode3
 '************************************************
 DIM 반복횟수 AS BYTE
 DIM arrow AS INTEGER
-arrow=0
+arrow=1
 DIM dis AS INTEGER
 DIM dis_old AS INTEGER
 DIM head_d AS INTEGER
@@ -191,12 +191,26 @@ CHECKLINE:
     ELSEIF A=164 THEN
     	GOTO 연속오른쪽옆으로70
     ELSEIF A=165 THEN
-    	보행횟수= 4
+    	GOTO MAIN
+    ELSEIF A=130 THEN
+    	PRINT "SOUND 12 !"
+    	보행횟수= 3
      	GOTO 전진횟수보행50
-    ELSE
-    
+    ELSEIF A=131 THEN
+    	PRINT "SOUND 13 !"
+    	보행횟수= 3
+     	GOTO 전진횟수보행50
+    	WAIT
+    	GOTO MAIN
+    ELSEIF A=132 THEN
+    	PRINT "SOUND 14 !"
+    	보행횟수= 3
+     	GOTO 전진횟수보행50
+    	WAIT
     	GOTO MAIN
 	ENDIF
+	GOTO MAIN
+	
 	
 	
 CHECKARROW:
@@ -205,9 +219,11 @@ CHECKARROW:
      	GOSUB 오른쪽턴90
     ELSEIF A=121 THEN
     	GOSUB 왼쪽턴90
+    	WAIT
     ELSE
     	ETX 4800,152
     	GOSUB CHECKARROW
+    	WAIT
 	ENDIF
 	RETURN
 
