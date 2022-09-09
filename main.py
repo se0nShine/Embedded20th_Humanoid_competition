@@ -22,6 +22,10 @@ def getDegree(p1, p2):
     return round(rad*(180/(numpy.pi)), 3)
 
 
+def getDistance(p1, p2):
+    return math.sqrt((p1[0]-p2[0])*(p1[0]-p2[0])+(p1[1]-p2[1])*(p1[1]-p2[1]))
+
+
 def getSubDegree(deg1, deg2):
     ang1 = max(deg1, deg2)-min(deg1, deg2)
     ang2 = 180-ang1
@@ -89,10 +93,12 @@ def traceLine(img):
                     else:
                         return 160
             except Exception as e:
-                print(e)
+                if str(e) != '0':
+                    print('error: ', e)
+                return 165
             finally:
                 cv2.imshow("traceLine", res)
-                return 165
+
     return 165
 
 
@@ -139,10 +145,12 @@ def detectDirection(img):
                 cv2.imshow("detectDirection", res)
                 return txs[text[0]]
         except Exception as e:
-            print(e)
+            if str(e) != '0':
+                print('error: ', e)
+            return 144
         finally:
             cv2.imshow("detectDirection", res)
-            return 144
+
     return 144
 
 
@@ -168,17 +176,20 @@ def detectArrow(img):
         x1, y1, x2, y2 = line[0]
         temp.append(line[0])
     x1, y1, x2, y2 = min(temp, key=lambda l: min(l[1], l[3]))
+    x3, y3, x4, y4 = max(temp, key=lambda l: max(l[1], l[3]))
 
     ang1 = math.atan(float(y2-y1)/(x2-x1))
+    ang2 = math.atan(float(y2-y1)/(x2-x1))
 
     img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
     cv2.line(res, (x1, y1), (x2, y2), (0, 255, 0), 3, cv2.LINE_AA)
+    cv2.line(res, (x3, y3), (x4, y4), (0, 255, 0), 3, cv2.LINE_AA)
 
-    if (ang1 > numpy.pi/8 and ang1 < 3*numpy.pi/8):
+    if (ang1 > numpy.pi/8 and ang1 < 3*numpy.pi/8) and (ang2 < -numpy.pi/8 and ang2 > -3*numpy.pi/8):
         cv2.putText(res, 'Left', (0, 50), 0, 1, (0, 255, 0), 2)
         cv2.imshow("traceLine", res)
         return 120
-    elif (ang1 < -numpy.pi/8 and ang1 > -3*numpy.pi/8):
+    elif (ang1 < -numpy.pi/8 and ang1 > -3*numpy.pi/8) and (ang2 > numpy.pi/8 and ang2 < 3*numpy.pi/8):
         cv2.putText(res, 'Right', (0, 50), 0, 1, (0, 255, 0), 2)
         cv2.imshow("traceLine", res)
         return 121
@@ -188,9 +199,100 @@ def detectArrow(img):
         return 122
 
 
-actionFunc = {150: traceLine, 151: detectDirection, 152: detectArrow}
+def detectCorner(img):
+
+    mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(mask, (15, 100, 0), (45, 255, 255))
+    img = cv2.bitwise_and(img, img, mask=mask)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    _, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    skel = numpy.zeros(img.shape, numpy.uint8)
+    element = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3))
+
+    open = cv2.morphologyEx(img, cv2.MORPH_OPEN, element)
+    temp = cv2.subtract(img, open)
+    eroded = cv2.erode(img, element)
+    skel = cv2.bitwise_or(skel, temp)
+    img = eroded.copy()
+
+    if cv2.countNonZero(img) == 0:
+        return 133
+    edges = cv2.Canny(skel, 200, 200)
+    linesP = cv2.HoughLinesP(edges, 1, numpy.pi/180, 30)
+    cdstP = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
+
+    if linesP is not None:
+        for line in range(0, len(linesP)):
+            I = linesP[line][0]
+        temps = []
+        points = []
+        for line in linesP:
+            x1, y1, x2, y2 = line[0]
+            rad = math.atan(float(y2-y1)/(x2-x1))
+            deg = round(rad*(180/(numpy.pi)), 3)
+            temps.append([x1, y1, x2, y2, deg])
+            points.append([x1, y1])
+            points.append([x2, y2])
+        stn = max(temps, key=lambda l: max(l[1], l[3]))
+        if stn[1] > stn[3]:
+            stn_point = [stn[0], stn[1]]
+        else:
+            stn_point = [stn[2], stn[3]]
+        left_point = min(points, key=lambda p: p[0])  # points 중x값중에 제일 작은거
+        right_point = max(points, key=lambda p: p[0])  # Points 중 x값중 제일 큰거
+
+        stn_deg = stn[4]
+        print_deg = stn_deg
+        if print_deg < 0:
+            print_deg += 180
+        cv2.circle(cdstP, (stn_point[0], stn_point[1]), 5, (255, 255, 255), -1)
+
+        if getDistance(left_point, stn_point) < 30:
+            left_deg = stn_deg
+        else:
+            left_deg = getDegree(left_point, stn_point)
+        cv2.line(cdstP, (stn_point[0], stn_point[1]), (left_point[0], left_point[1]),
+                 (0, 255, 0), 3, cv2.LINE_AA)
+        left_deg = getSubDegree(stn_deg, left_deg)
+        left = left_deg >= 15 and left_deg <= 75
+
+        if getDistance(right_point, stn_point) < 30:
+            right_deg = stn_deg
+        else:
+            right_deg = getDegree(right_point, stn_point)
+        cv2.line(cdstP, (stn_point[0], stn_point[1]), (right_point[0], right_point[1]),
+                 (0, 255, 0), 3, cv2.LINE_AA)
+        right_deg = getSubDegree(stn_deg, right_deg)
+        right = right_deg >= 15 and right_deg <= 75
+
+        if right and left:
+            return 130
+        elif right and not(left):
+            return 131
+        elif not(right) and left:
+            return 132
+        else:
+            return 133
+
+        if not math.isnan(print_deg):
+            cv2.line(cdstP, (stn[0], stn[1]), (stn[2], stn[3]),
+                     (0, 0, 255), 3, cv2.LINE_AA)
+
+        cv2.imshow("detectCorner", cdstP)
+    return 133
 
 
+def detectLine(img):
+    tx = detectCorner(img)
+    if tx == 133:
+        return traceLine(img)
+    return tx
+
+
+actionFunc = {150: detectLine, 151: detectDirection, 152: detectArrow}
+
+
+sendTX(128)
 while True:
     cv2.waitKey(1)
     _, img = cap.read()
@@ -199,5 +301,6 @@ while True:
         tx = actionFunc[rx](img)
         sendTX(tx)
     except Exception as e:
-        print(e)
+        if str(e) != '0':
+            print('main loop error: ', e)
     cv2.imshow("camera", img)
