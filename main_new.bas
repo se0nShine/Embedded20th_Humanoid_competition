@@ -98,10 +98,11 @@ All_motor_mode3:
     RETURN
     
 '*********전역변수 선언부*********
-
+DIM 반복횟수 AS BYTE
 DIM ready AS BYTE
 DIM _rx AS BYTE
 DIM dis AS INTEGER
+DIM walkCount AS BYTE
 
 ready=0
 
@@ -119,7 +120,7 @@ GOTO MAIN
     RETURN
     
     
-전진횟수보행50:'함수 호출시마다 보행횟수 값 설정필요
+전진횟수보행50:'함수 호출시마다 walkCount 값 설정필요
     반복횟수 = 0
     GOSUB Leg_motor_mode3     
     IF 보행순서 = 0 THEN
@@ -173,7 +174,7 @@ GOTO MAIN
     MOVE G6B,110
     MOVE G6C,90
     WAIT
-    IF 반복횟수 >= 보행횟수 THEN         
+    IF 반복횟수 >= walkCount THEN         
         HIGHSPEED SETOFF         
         SPEED 5
         '왼쪽기울기2
@@ -208,7 +209,7 @@ GOTO MAIN
     MOVE G6B, 90
     MOVE G6C,110
     WAIT
-    IF 반복횟수 >= 보행횟수 THEN
+    IF 반복횟수 >= walkCount THEN
         HIGHSPEED SETOFF      
         SPEED 5
         '오른쪽기울기2
@@ -237,6 +238,31 @@ GET_RX:'save rx value to variable _rx
 	RETURN
 
 
+GET_RX_REPEAT:'get rx repeatly until _rx is valid
+	ERX 4800,_rx,GET_RX_REPEAT
+	RETURN
+	
+
+CHECKLINE:
+	ETX 4800,151
+    GOSUB GET_RX_REPEAT
+    IF _rx=160 THEN
+    	walkCount=2
+    	GOSUB 전진횟수보행50
+    ELSEIF _rx=161 THEN
+    	GOSUB 왼쪽턴10
+    ELSEIF _rx=162 THEN
+    	GOSUB 오른쪽턴10
+	ELSEIF _rx=163 THEN
+    	GOSUB 연속왼쪽옆으로70
+    ELSEIF _rx=164 THEN
+    	GOSUB 연속오른쪽옆으로70
+    ELSE
+    	GOTO CHECKLINE
+    ENDIF
+	RETURN
+
+
 MAIN:
 	GOSUB GET_RX
 	
@@ -250,18 +276,7 @@ MAIN:
 	ENDIF
 	
 	IF ready=1 THEN
-    	dis=AD(4)
-    	IF dis>50 THEN
-    		GOSUB 기본자세
-    		ETX 4800,151
-    		GOTO CHECKALPHA
-    	ELSE
-    		IF dis_old>50 THEN
-    			MOVE G6C,100,  30,  80, 100, 25, 100
-    		ENDIF
-    		ETX 4800,150
-    		GOTO CHECKLINE
-    	ENDIF
+    	GOSUB CHECKLINE
 	ENDIF
 	
 	GOTO MAIN
