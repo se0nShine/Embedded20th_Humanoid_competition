@@ -139,6 +139,58 @@ def traceLine(img):
 
     return 109
 
+def traceLine_EXIT(img):
+    res = img
+    mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(mask, tuple(yellow_low), tuple(yellow_up))
+    img = cv2.bitwise_and(img, img, mask=mask)
+    contours, _ = cv2.findContours(mask, 1, cv2.CHAIN_APPROX_NONE)
+    if len(contours) > 0:
+        c = max(contours, key=cv2.contourArea)
+        x,y,w,h=cv2.boundingRect(c)
+        if (h<50):
+            return 211 #exit completely finished 로보베이직에서 위험지역 단어 말하면 
+        
+        M = cv2.moments(c)
+        if M["m00"] != 0:
+            cx = int(M['m10'] / M['m00'])
+            _, cols = img.shape[:2]
+            [vx, vy, x, y] = cv2.fitLine(c, cv2.DIST_L2, 0, 0.01, 0.01)
+            cv2.line(res, (cx, 0), (cx, viewSize[1]), (0, 0, 255), 3)
+            cv2.drawContours(res, c, -1, (0, 255, 0), 2)
+            try:
+                y1 = int((-x * vy / vx) + y)
+                y2 = int(((cols - x) * vy / vx) + y)
+                deg = getDegree((0, y1), (cols - 1, y2))
+                resultDeg = round(getSubDegree(90, deg), 1)
+                if deg > 0:
+                    deg = resultDeg
+                else:
+                    deg = -resultDeg
+
+                cv2.putText(res, str(deg), (0, 50), 0, 1, (0, 255, 0), 2)
+                cv2.imshow("traceLine", res)
+
+                if deg <= -5:
+                    return 103
+                elif deg >= 5:
+                    return 102
+                else:
+                    if cx <= 120:
+                        return 104
+                    elif cx >= 200:
+                        return 105
+                    else:
+                        return 101
+            except Exception as e:
+                if str(e) != '0':
+                    print('error: ', e)
+                return 109
+            finally:
+                cv2.imshow("traceLine", res)
+
+    return 109
+
 def detectYellow(img):
     mask = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(mask, tuple(yellow_low), tuple(yellow_up))
