@@ -529,16 +529,13 @@ def detectRoomName(img):
     cv2.imshow("ss", img_blue)
 
     ret = detectRoomWord(img_red)
-
+    roomColor = 1
+    
     if ret == 149:
-        roomColor = 1
         ret = detectRoomWord(img_blue)
         if ret != 149:
             roomColor = 2
-            ret += 4
-        return ret
     return ret
-
 
 def onChangeHMin(val):
     global lower_color
