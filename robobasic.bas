@@ -1,4 +1,4 @@
-'******** 2Á· º¸Çà·Îº¿ ÃÊ±â ¿µÁ¡ ÇÁ·Î±×·¥ ********
+'******** 2ì¡± ë³´í–‰ë¡œë´‡ ì´ˆê¸° ì˜ì  í”„ë¡œê·¸ëž¨ ********
 
 DIM I AS BYTE
 DIM J AS BYTE
@@ -9,25 +9,25 @@ DIM Y AS BYTE
 DIM A_old AS BYTE
 DIM B AS BYTE
 DIM C AS BYTE
-DIM º¸Çà¼Óµµ AS BYTE
-DIM ÁÂ¿ì¼Óµµ AS BYTE
-DIM ÁÂ¿ì¼Óµµ2 AS BYTE
-DIM º¸Çà¼ø¼­ AS BYTE
-DIM ÇöÀçÀü¾Ð AS BYTE
-DIM ¹ÝÀüÃ¼Å© AS BYTE
-DIM ¸ðÅÍONOFF AS BYTE
-DIM ÀÚÀÌ·ÎONOFF AS BYTE
-DIM ±â¿ï±â¾ÕµÚ AS INTEGER
-DIM ±â¿ï±âÁÂ¿ì AS INTEGER
+DIM ë³´í–‰ì†ë„ AS BYTE
+DIM ì¢Œìš°ì†ë„ AS BYTE
+DIM ì¢Œìš°ì†ë„2 AS BYTE
+DIM ë³´í–‰ìˆœì„œ AS BYTE
+DIM í˜„ìž¬ì „ì•• AS BYTE
+DIM ë°˜ì „ì²´í¬ AS BYTE
+DIM ëª¨í„°ONOFF AS BYTE
+DIM ìžì´ë¡œONOFF AS BYTE
+DIM ê¸°ìš¸ê¸°ì•žë’¤ AS INTEGER
+DIM ê¸°ìš¸ê¸°ì¢Œìš° AS INTEGER
 
-DIM °î¼±¹æÇâ AS BYTE
+DIM ê³¡ì„ ë°©í–¥ AS BYTE
 
-DIM ³Ñ¾îÁøÈ®ÀÎ AS BYTE
-DIM ±â¿ï±âÈ®ÀÎÈ½¼ö AS BYTE
-DIM º¸ÇàÈ½¼ö AS BYTE
-DIM º¸ÇàCOUNT AS BYTE
+DIM ë„˜ì–´ì§„í™•ì¸ AS BYTE
+DIM ê¸°ìš¸ê¸°í™•ì¸íšŸìˆ˜ AS BYTE
+DIM ë³´í–‰íšŸìˆ˜ AS BYTE
+DIM ë³´í–‰COUNT AS BYTE
 
-DIM Àû¿Ü¼±°Å¸®°ª  AS BYTE
+DIM ì ì™¸ì„ ê±°ë¦¬ê°’  AS BYTE
 
 DIM S11  AS BYTE
 DIM S16  AS BYTE
@@ -44,43 +44,43 @@ DIM BUTTON_NO AS INTEGER
 DIM SOUND_BUSY AS BYTE
 DIM TEMP_INTEGER AS INTEGER
 
-'**** ±â¿ï±â¼¾¼­Æ÷Æ® ¼³Á¤ ****
-CONST ¾ÕµÚ±â¿ï±âADÆ÷Æ® = 0
-CONST ÁÂ¿ì±â¿ï±âADÆ÷Æ® = 1
-CONST ±â¿ï±âÈ®ÀÎ½Ã°£ = 20  'ms
+'**** ê¸°ìš¸ê¸°ì„¼ì„œí¬íŠ¸ ì„¤ì • ****
+CONST ì•žë’¤ê¸°ìš¸ê¸°ADí¬íŠ¸ = 0
+CONST ì¢Œìš°ê¸°ìš¸ê¸°ADí¬íŠ¸ = 1
+CONST ê¸°ìš¸ê¸°í™•ì¸ì‹œê°„ = 20  'ms
 
-CONST Àû¿Ü¼±ADÆ÷Æ®  = 4
+CONST ì ì™¸ì„ ADí¬íŠ¸  = 4
 
-CONST min = 61	'µÚ·Î³Ñ¾îÁ³À»¶§
-CONST max = 107	'¾ÕÀ¸·Î³Ñ¾îÁ³À»¶§
+CONST min = 61	'ë’¤ë¡œë„˜ì–´ì¡Œì„ë•Œ
+CONST max = 107	'ì•žìœ¼ë¡œë„˜ì–´ì¡Œì„ë•Œ
 CONST COUNT_MAX = 3
 
 
-CONST ¸Ó¸®ÀÌµ¿¼Óµµ = 10
+CONST ë¨¸ë¦¬ì´ë™ì†ë„ = 10
 '************************************************
 
 
 
-PTP SETON 				'´ÜÀ§±×·ìº° Á¡´ëÁ¡µ¿ÀÛ ¼³Á¤
-PTP ALLON				'ÀüÃ¼¸ðÅÍ Á¡´ëÁ¡ µ¿ÀÛ ¼³Á¤
+PTP SETON 				'ë‹¨ìœ„ê·¸ë£¹ë³„ ì ëŒ€ì ë™ìž‘ ì„¤ì •
+PTP ALLON				'ì „ì²´ëª¨í„° ì ëŒ€ì  ë™ìž‘ ì„¤ì •
 
-DIR G6A,1,0,0,1,0,0		'¸ðÅÍ0~5¹ø
-DIR G6D,0,1,1,0,1,1		'¸ðÅÍ18~23¹ø
-DIR G6B,1,1,1,1,1,1		'¸ðÅÍ6~11¹ø
-DIR G6C,0,0,0,0,1,0		'¸ðÅÍ12~17¹ø
+DIR G6A,1,0,0,1,0,0		'ëª¨í„°0~5ë²ˆ
+DIR G6D,0,1,1,0,1,1		'ëª¨í„°18~23ë²ˆ
+DIR G6B,1,1,1,1,1,1		'ëª¨í„°6~11ë²ˆ
+DIR G6C,0,0,0,0,1,0		'ëª¨í„°12~17ë²ˆ
 
 '************************************************
 
-OUT 52,0	'¸Ó¸® LED ÄÑ±â
-'***** ÃÊ±â¼±¾ð '************************************************
+OUT 52,0	'ë¨¸ë¦¬ LED ì¼œê¸°
+'***** ì´ˆê¸°ì„ ì–¸ '************************************************
 
-º¸Çà¼ø¼­ = 0
-¹ÝÀüÃ¼Å© = 0
-±â¿ï±âÈ®ÀÎÈ½¼ö = 0
-º¸ÇàÈ½¼ö = 1
-¸ðÅÍONOFF = 0
+ë³´í–‰ìˆœì„œ = 0
+ë°˜ì „ì²´í¬ = 0
+ê¸°ìš¸ê¸°í™•ì¸íšŸìˆ˜ = 0
+ë³´í–‰íšŸìˆ˜ = 1
+ëª¨í„°ONOFF = 0
 
-'****ÃÊ±âÀ§Ä¡ ÇÇµå¹é*****************************
+'****ì´ˆê¸°ìœ„ì¹˜ í”¼ë“œë°±*****************************
 
 
 TEMPO 230
@@ -100,28 +100,28 @@ SERVO 16, S16
 SERVO 16, 100
 
 
-GOSUB Àü¿øÃÊ±âÀÚ¼¼
-GOSUB ±âº»ÀÚ¼¼
+GOSUB ì „ì›ì´ˆê¸°ìžì„¸
+GOSUB ê¸°ë³¸ìžì„¸
 
 
-GOSUB ÀÚÀÌ·ÎINIT
-GOSUB ÀÚÀÌ·ÎMID
-GOSUB ÀÚÀÌ·ÎON
+GOSUB ìžì´ë¡œINIT
+GOSUB ìžì´ë¡œMID
+GOSUB ìžì´ë¡œON
 
-'¹ÞÀº À½¿ø
+'ë°›ì€ ìŒì›
 'PRINT "open 22GongMo.mrs !"
 'PRINT "VOLUME 100 !"
 'PRINT "SND 1 !"
 'GOSUB SOUND_PLAY_CHK
 
 'PRINT "VOLUME 200 !"
-'PRINT "SOUND 12 !" '¾È³çÇÏ¼¼¿ä
+'PRINT "SOUND 12 !" 'ì•ˆë…•í•˜ì„¸ìš”
 
 GOSUB All_motor_mode3
 
 
 '************************************************
-DIM ¹Ýº¹È½¼ö AS BYTE
+DIM ë°˜ë³µíšŸìˆ˜ AS BYTE
 DIM arrow AS INTEGER
 arrow=0
 DIM dis AS INTEGER
@@ -140,7 +140,7 @@ DIM direction AS BYTE
 go=0
 milk=0
 head=0
-º¸ÇàCOUNT = 0
+ë³´í–‰COUNT = 0
 center=0
 roomC = 0
 direction = 0
@@ -169,13 +169,13 @@ vstate=0
 BPS=4800
 
 
-GOTO MAIN	'½Ã¸®¾ó ¼ö½Å ·çÆ¾À¸
+GOTO MAIN	'ì‹œë¦¬ì–¼ ìˆ˜ì‹  ë£¨í‹´ìœ¼
 
 MAIN:
 
-    GOSUB ¾ÕµÚ±â¿ï±âÃøÁ¤
-    GOSUB ÁÂ¿ì±â¿ï±âÃøÁ¤
-    GOSUB Àû¿Ü¼±°Å¸®¼¾¼­È®ÀÎ
+    GOSUB ì•žë’¤ê¸°ìš¸ê¸°ì¸¡ì •
+    GOSUB ì¢Œìš°ê¸°ìš¸ê¸°ì¸¡ì •
+    GOSUB ì ì™¸ì„ ê±°ë¦¬ì„¼ì„œí™•ì¸
 
 
 	GOSUB GET_RX
@@ -198,11 +198,11 @@ MAIN:
     
 	  	ELSEIF vstate = 3 THEN
 		    IF find=0 THEN
-		    	GOSUB °í°³³»¸®±â 
+		    	GOSUB ê³ ê°œë‚´ë¦¬ê¸° 
 		    	ETX 4800, 153
 		    	GOSUB CHECKITEM    
 		    ELSEIF find=1 THEN
-		    	GOSUB °í°³¿ÏÀü³»¸®±â  
+		    	GOSUB ê³ ê°œì™„ì „ë‚´ë¦¬ê¸°  
 		    	ETX 4800, 154
 		   	 	GOSUB CHECKITEM2
 		    ELSEIF find=2 THEN
@@ -216,7 +216,7 @@ MAIN:
 		  
 	    'ELSEIF vstate = 4 THEN
 		'    IF find=0 THEN
-		'    	GOSUB °í°³³»¸®±â 
+		'    	GOSUB ê³ ê°œë‚´ë¦¬ê¸° 
 		'    	ETX 4800, 158
 		'    	GOSUB CHECKITEM
 		'    ENDIF
@@ -230,13 +230,13 @@ MAIN:
     
     
 BACK_LINE:
-	dis = AD(Àû¿Ü¼±ADÆ÷Æ®)
+	dis = AD(ì ì™¸ì„ ADí¬íŠ¸)
 	IF dis>90 THEN
-		GOSUB ¿À¸¥ÂÊÅÏ10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
 		WAIT
 	ELSE
-		º¸ÇàÈ½¼ö= 1
-        GOSUB ÀüÁøÈ½¼öº¸Çà50 
+		ë³´í–‰íšŸìˆ˜= 1
+        GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50 
         WAIT
     ENDIF
     ETX 4800,158
@@ -251,16 +251,16 @@ TRACE_LINE:
 	ETX 4800,150
 	GOSUB GET_RX_REPEAT
 	IF vrx=101 THEN
-		º¸ÇàÈ½¼ö= 1
-        GOSUB ÀüÁøÈ½¼öº¸Çà50 
+		ë³´í–‰íšŸìˆ˜= 1
+        GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50 
 	ELSEIF vrx=102 THEN
-		GOSUB ¿ÞÂÊÅÏ10
+		GOSUB ì™¼ìª½í„´10
 	ELSEIF vrx=103 THEN
-		GOSUB ¿À¸¥ÂÊÅÏ10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
 	ELSEIF vrx=104 THEN
-		GOSUB ¿¬¼Ó¿ÞÂÊ¿·À¸·Î70
+		GOSUB ì—°ì†ì™¼ìª½ì˜†ìœ¼ë¡œ70
 	ELSEIF vrx=105 THEN
-		GOSUB ¿¬¼Ó¿À¸¥ÂÊ¿·À¸·Î70
+		GOSUB ì—°ì†ì˜¤ë¥¸ìª½ì˜†ìœ¼ë¡œ70
 	ELSEIF vrx=106 THEN
 		DELAY 1000
 		MOVE G6C,100,  30,  80, 100, 100, 100
@@ -321,17 +321,17 @@ DETECT_DIRECTION:
 		GOSUB NORTH
 		WAIT
 		GOSUB Goto_Edge
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		º¸ÇàÈ½¼ö=2
-		GOSUB ÀüÁøÈ½¼öº¸Çà50
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		ë³´í–‰íšŸìˆ˜=2
+		GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
 		DELAY 1000
 		vstate= vstate + 1
 		direction = 0
@@ -339,17 +339,17 @@ DETECT_DIRECTION:
 		GOSUB NORTH
 		WAIT
 		GOSUB Goto_Edge
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		º¸ÇàÈ½¼ö=2
-		GOSUB ÀüÁøÈ½¼öº¸Çà50
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		ë³´í–‰íšŸìˆ˜=2
+		GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
 		DELAY 1000
 		vstate= vstate + 1
 		direction = 1
@@ -357,17 +357,17 @@ DETECT_DIRECTION:
 		GOSUB WEST
 		WAIT
 		GOSUB Goto_Edge
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		º¸ÇàÈ½¼ö=2
-		GOSUB ÀüÁøÈ½¼öº¸Çà50
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		ë³´í–‰íšŸìˆ˜=2
+		GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
 		DELAY 1000
 		vstate= vstate + 1
 		direction = 0
@@ -375,17 +375,17 @@ DETECT_DIRECTION:
 		GOSUB WEST
 		WAIT
 		GOSUB Goto_Edge
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		º¸ÇàÈ½¼ö=2
-		GOSUB ÀüÁøÈ½¼öº¸Çà50
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		ë³´í–‰íšŸìˆ˜=2
+		GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
 		DELAY 1000
 		vstate= vstate + 1
 		direction = 1
@@ -393,17 +393,17 @@ DETECT_DIRECTION:
 		GOSUB SOUTH
 		WAIT
 		GOSUB Goto_Edge
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		º¸ÇàÈ½¼ö=2
-		GOSUB ÀüÁøÈ½¼öº¸Çà50
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		ë³´í–‰íšŸìˆ˜=2
+		GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
 		DELAY 1000
 		vstate= vstate + 1
 		direction = 0
@@ -411,17 +411,17 @@ DETECT_DIRECTION:
 		GOSUB SOUTH
 		WAIT
 		GOSUB Goto_Edge
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		º¸ÇàÈ½¼ö=2
-		GOSUB ÀüÁøÈ½¼öº¸Çà50
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		ë³´í–‰íšŸìˆ˜=2
+		GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
 		DELAY 1000
 		vstate= vstate + 1
 		direction = 1
@@ -429,17 +429,17 @@ DETECT_DIRECTION:
 		GOSUB EAST
 		WAIT
 		GOSUB Goto_Edge
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		GOSUB ¿ÞÂÊÅÏ10
-		º¸ÇàÈ½¼ö=2
-		GOSUB ÀüÁøÈ½¼öº¸Çà50
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		GOSUB ì™¼ìª½í„´10
+		ë³´í–‰íšŸìˆ˜=2
+		GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
 		DELAY 1000
 		vstate= vstate + 1
 		direction = 0
@@ -447,17 +447,17 @@ DETECT_DIRECTION:
 		GOSUB EAST
 		WAIT
 		GOSUB Goto_Edge
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		GOSUB ¿À¸¥ÂÊÅÏ10
-		º¸ÇàÈ½¼ö=2
-		GOSUB ÀüÁøÈ½¼öº¸Çà50
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		GOSUB ì˜¤ë¥¸ìª½í„´10
+		ë³´í–‰íšŸìˆ˜=2
+		GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
 		DELAY 1000
 		vstate= vstate + 1
 		direction = 1
@@ -473,7 +473,7 @@ Left_Mission:
 		GOTO Left_Mission
 	ELSE
 		roomC = vrx
-		GOSUB ¿ÞÂÊÅÏ90
+		GOSUB ì™¼ìª½í„´90
 	ENDIF
 	
 	
@@ -486,7 +486,7 @@ Right_Mission:
 		GOTO Right_Mission
 	ELSE
 		roomC = vrx
-		GOSUB ¿À¸¥ÂÊÅÏ90
+		GOSUB ì˜¤ë¥¸ìª½í„´90
 	ENDIF
 	
 	RETURN
@@ -496,8 +496,8 @@ Goto_Edge:
 	ETX 4800,156
 	GOSUB GET_RX_REPEAT
 	IF vrx=193 THEN
-		º¸ÇàÈ½¼ö= 1
-        GOSUB ÀüÁøÈ½¼öº¸Çà50
+		ë³´í–‰íšŸìˆ˜= 1
+        GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
 		GOTO Goto_Edge
 	ELSEIF vrx=194 THEN
 		DELAY 1000
@@ -507,7 +507,7 @@ Goto_Edge:
 	RETURN
     
 CHECKDANGER:
-	SPEED ¸Ó¸®ÀÌµ¿¼Óµµ
+	SPEED ë¨¸ë¦¬ì´ë™ì†ë„
     SERVO 11,55
     MOVE G6C,100,  30,  80, 100, 55, 100
     WAIT
@@ -520,9 +520,9 @@ CHECKDANGER:
 		MOVE G6C,100,  30,  80, 100, 100, 100
 		WAIT
 		DELAY 2000
-		'°è´Ü¿Ã¶ó°¡´Â ÄÚµå ³Ö¾î¾ßÇÔ 
+		'ê³„ë‹¨ì˜¬ë¼ê°€ëŠ” ì½”ë“œ ë„£ì–´ì•¼í•¨ 
 	ELSEIF vrx=196 THEN
-		GOSUB À§ÇèÁö¿ª 
+		GOSUB ìœ„í—˜ì§€ì—­ 
 		SERVO 11,100
     	SERVO 16,100
     	WAIT
@@ -538,35 +538,35 @@ CHECKITEM:
 	
     IF A=170 THEN
     	
-        GOSUB ÈÄÁøÁ¾Á¾°ÉÀ½ 
+        GOSUB í›„ì§„ì¢…ì¢…ê±¸ìŒ 
 
     ELSEIF A=171 THEN
         
-        GOSUB ¿ÞÂÊÅÏ10
+        GOSUB ì™¼ìª½í„´10
 
     ELSEIF A=172 THEN
         
-        GOSUB ÀüÁøÈ½¼öº¸Çà50
+        GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
 
     ELSEIF A=173 THEN
         
-        GOSUB ¿À¸¥ÂÊÅÏ10
+        GOSUB ì˜¤ë¥¸ìª½í„´10
 
     ELSEIF A=174 THEN
         
-        GOSUB ¿ÞÂÊÅÏ10
+        GOSUB ì™¼ìª½í„´10
             
 	ELSEIF A=175 THEN
         
-        GOSUB ÀüÁøÈ½¼öº¸Çà50
+        GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50
             
     ELSEIF A=176 THEN
         
-        GOSUB ¿À¸¥ÂÊÅÏ10
+        GOSUB ì˜¤ë¥¸ìª½í„´10
             
     ELSEIF A=177 THEN
         
-        GOSUB ¿ÞÂÊÅÏ10
+        GOSUB ì™¼ìª½í„´10
       
             
     ELSEIF A=178 THEN
@@ -575,7 +575,7 @@ CHECKITEM:
     
     ELSEIF A=179 THEN
         
-        GOSUB ¿À¸¥ÂÊÅÏ10
+        GOSUB ì˜¤ë¥¸ìª½í„´10
 
     
     ELSE
@@ -599,56 +599,56 @@ CHECKITEM2:
 
     ELSEIF A=181 THEN
         
-        GOSUB ¿¬¼Ó¿ÞÂÊ¿·À¸·Î70
+        GOSUB ì—°ì†ì™¼ìª½ì˜†ìœ¼ë¡œ70
 
     ELSEIF A=182 THEN
         
-        GOSUB ÀüÁøÈ½¼öº¸Çà50	 
+        GOSUB ì „ì§„íšŸìˆ˜ë³´í–‰50	 
 
     ELSEIF A=183 THEN
         
-        GOSUB ¿¬¼Ó¿À¸¥ÂÊ¿·À¸·Î70
+        GOSUB ì—°ì†ì˜¤ë¥¸ìª½ì˜†ìœ¼ë¡œ70
 
     ELSEIF A=184 THEN
         
-        GOSUB ¿¬¼Ó¿ÞÂÊ¿·À¸·Î70
+        GOSUB ì—°ì†ì™¼ìª½ì˜†ìœ¼ë¡œ70
             
 	ELSEIF A=185 THEN
         
-        GOSUB ¿ìÀ¯ÆÑÀâ±â
+        GOSUB ìš°ìœ íŒ©ìž¡ê¸°
         MOVE G6C,185,  10,  60, 100, 25, 100
-        GOSUB Áý°í¿À¸¥ÂÊÅÏ60
-        GOSUB Áý°í¿À¸¥ÂÊÅÏ60
-        GOSUB Áý°í¿À¸¥ÂÊÅÏ60
+        GOSUB ì§‘ê³ ì˜¤ë¥¸ìª½í„´60
+        GOSUB ì§‘ê³ ì˜¤ë¥¸ìª½í„´60
+        GOSUB ì§‘ê³ ì˜¤ë¥¸ìª½í„´60
         find = 2
     	
             
     ELSEIF A=186 THEN
         
-        GOSUB ¿¬¼Ó¿À¸¥ÂÊ¿·À¸·Î70
+        GOSUB ì—°ì†ì˜¤ë¥¸ìª½ì˜†ìœ¼ë¡œ70
             
     ELSEIF A=187 THEN
         
-        GOSUB ¿¬¼Ó¿ÞÂÊ¿·À¸·Î70
+        GOSUB ì—°ì†ì™¼ìª½ì˜†ìœ¼ë¡œ70
       
             
     ELSEIF A=188 THEN
         
-        GOSUB ¿ìÀ¯ÆÑÀâ±â
+        GOSUB ìš°ìœ íŒ©ìž¡ê¸°
         MOVE G6C,185,  10,  60, 100, 25, 100
-       	GOSUB Áý°í¿À¸¥ÂÊÅÏ60
-        GOSUB Áý°í¿À¸¥ÂÊÅÏ60
-        GOSUB Áý°í¿À¸¥ÂÊÅÏ60
+       	GOSUB ì§‘ê³ ì˜¤ë¥¸ìª½í„´60
+        GOSUB ì§‘ê³ ì˜¤ë¥¸ìª½í„´60
+        GOSUB ì§‘ê³ ì˜¤ë¥¸ìª½í„´60
         find = 2
     
     ELSEIF A=189 THEN
         
-        GOSUB ¿¬¼Ó¿À¸¥ÂÊ¿·À¸·Î70
+        GOSUB ì—°ì†ì˜¤ë¥¸ìª½ì˜†ìœ¼ë¡œ70
 
     ELSEIF A=191 THEN
-    	GOSUB Àâ°íº¸Çà50
+    	GOSUB ìž¡ê³ ë³´í–‰50
     ELSEIF A=192 THEN
-    	GOSUB ¿ìÀ¯ÆÑ³õ±â
+    	GOSUB ìš°ìœ íŒ©ë†“ê¸°
     	
     	vstate=4
     	find=0
@@ -687,7 +687,7 @@ GET_RX_REPEAT:'get rx repeatly until _rx is valid
 
     
    '*************************************
-±¸Á¶¿äÃ»:
+êµ¬ì¡°ìš”ì²­:
 	PRINT "open 22GongMo.mrs !"
     PRINT "VOLUME 100 !"
     PRINT "SND 7 !"
@@ -696,7 +696,7 @@ GET_RX_REPEAT:'get rx repeatly until _rx is valid
     GOSUB SOUND_PLAY_CHK
     RETURN
 	
-À§ÇèÁö¿ª:
+ìœ„í—˜ì§€ì—­:
 	PRINT "open 22GongMo.mrs !"
     PRINT "VOLUME 100 !"
     PRINT "SND 6 !"
@@ -762,24 +762,38 @@ South:
     MOVE G6C,10,  30,  80
     WAIT
     RETURN
+    
+    ë°©ì´ë¦„_B:
+	PRINT "open 22GongMo.mrs !"
+    PRINT "VOLUME 100 !"
+    PRINT "SND 9 !"
+    GOSUB SOUND_PLAY_CHK
+    RETURN
+    
+    ë°©ì´ë¦„_D:
+	PRINT "open 22GongMo.mrs !"
+    PRINT "VOLUME 100 !"
+    PRINT "SND 11 !"
+    GOSUB SOUND_PLAY_CHK
+    RETURN
 
 
     '*************************************
-°í°³³»¸®±â:
+ê³ ê°œë‚´ë¦¬ê¸°:
 	SPEED 2
     MOVE G6B,100,  30,  80, 100, 100, 100
     MOVE G6C,100, 30, 80, 100, 70, 100
     WAIT
 	RETURN
 
-°í°³¿ÏÀü³»¸®±â: 
+ê³ ê°œì™„ì „ë‚´ë¦¬ê¸°: 
 	SPEED 2
 	MOVE G6B,100,35
     MOVE G6C,100,35,80, 100, 25, 100
     WAIT
     RETURN
 	
-°í°³¿À¸¥ÂÊ³»¸®±â:
+ê³ ê°œì˜¤ë¥¸ìª½ë‚´ë¦¬ê¸°:
     SPEED 2
     MOVE G6B,100,  30,  80, 100, 100, 100
     MOVE G6C,100,  30,  80, 100, 100, 100
@@ -790,7 +804,7 @@ South:
     MOVE G6C,100, 30, 80, 100, 70, 100
     RETURN
 
-°í°³¿ÞÂÊ³»¸®±â:
+ê³ ê°œì™¼ìª½ë‚´ë¦¬ê¸°:
     SPEED 2
     MOVE G6B,100,  30,  80, 100, 100, 100
     MOVE G6C,100,  30,  80, 100, 100, 100
@@ -809,229 +823,229 @@ South:
     '*************************************
     
 
-ÀüÁøÈ½¼öº¸Çà50:
-    ³Ñ¾îÁøÈ®ÀÎ = 0
-    ¹Ýº¹È½¼ö = 0
+ì „ì§„íšŸìˆ˜ë³´í–‰50:
+    ë„˜ì–´ì§„í™•ì¸ = 0
+    ë°˜ë³µíšŸìˆ˜ = 0
     GOSUB Leg_motor_mode3
-    IF º¸Çà¼ø¼­ = 0 THEN
-        º¸Çà¼ø¼­ = 1
-        SPEED 3         '¿À¸¥ÂÊ±â¿ï±â
+    IF ë³´í–‰ìˆœì„œ = 0 THEN
+        ë³´í–‰ìˆœì„œ = 1
+        SPEED 3         'ì˜¤ë¥¸ìª½ê¸°ìš¸ê¸°
         MOVE G6A, 88,  71, 152,  91, 110
         MOVE G6D,108,  76, 146,  93,  94
         MOVE G6B,100,35
         MOVE G6C,100,35,80, 100
         WAIT
-        SPEED 10'º¸Çà¼Óµµ         '¿Þ¹ßµé±â
+        SPEED 10'ë³´í–‰ì†ë„         'ì™¼ë°œë“¤ê¸°
         MOVE G6A, 90, 100, 115, 105, 114
         MOVE G6D,113,  78, 146,  93,  94
         MOVE G6B,90
         MOVE G6C,110
         WAIT
-        GOTO ÀüÁøÈ½¼öº¸Çà50_1
+        GOTO ì „ì§„íšŸìˆ˜ë³´í–‰50_1
     ELSE
-        º¸Çà¼ø¼­ = 0
-        SPEED 3         '¿ÞÂÊ±â¿ï±â
+        ë³´í–‰ìˆœì„œ = 0
+        SPEED 3         'ì™¼ìª½ê¸°ìš¸ê¸°
         MOVE G6D,  88,  71, 152,  91, 110
         MOVE G6A, 108,  76, 146,  93,  94
         MOVE G6C, 100,35,80, 100
         MOVE G6B, 100,35
         WAIT
-        SPEED 10'º¸Çà¼Óµµ         '¿À¸¥¹ßµé±â
+        SPEED 10'ë³´í–‰ì†ë„         'ì˜¤ë¥¸ë°œë“¤ê¸°
         MOVE G6D, 90, 100, 115, 105, 114
         MOVE G6A,113,  78, 146,  93,  94
         MOVE G6C,90
         MOVE G6B,110
         WAIT
-        GOTO ÀüÁøÈ½¼öº¸Çà50_2
+        GOTO ì „ì§„íšŸìˆ˜ë³´í–‰50_2
     ENDIF
 
-ÀüÁøÈ½¼öº¸Çà50_1:
-    ¹Ýº¹È½¼ö = ¹Ýº¹È½¼ö + 1
+ì „ì§„íšŸìˆ˜ë³´í–‰50_1:
+    ë°˜ë³µíšŸìˆ˜ = ë°˜ë³µíšŸìˆ˜ + 1
     SPEED 10
-    '¿Þ¹ß»»¾îÂøÁö
+    'ì™¼ë°œë»£ì–´ì°©ì§€
     MOVE G6A, 85,  44, 163, 113, 114
     MOVE G6D,110,  77, 146,  93,  94
     WAIT
-    SPEED 4     '¿Þ¹ßÁß½ÉÀÌµ¿
+    SPEED 4     'ì™¼ë°œì¤‘ì‹¬ì´ë™
     MOVE G6A,110,  76, 144, 100,  93
     MOVE G6D,85, 93, 155,  71, 112
     WAIT
-    SPEED 10     '¿À¸¥¹ßµé±â10
+    SPEED 10     'ì˜¤ë¥¸ë°œë“¤ê¸°10
     MOVE G6A,111,  77, 146,  93, 94
     MOVE G6D,90, 100, 105, 110, 114
     MOVE G6B,110
     MOVE G6C,90
     WAIT
-    IF ¹Ýº¹È½¼ö >= º¸ÇàÈ½¼ö THEN
+    IF ë°˜ë³µíšŸìˆ˜ >= ë³´í–‰íšŸìˆ˜ THEN
         HIGHSPEED SETOFF
         SPEED 5
-        '¿ÞÂÊ±â¿ï±â2
+        'ì™¼ìª½ê¸°ìš¸ê¸°2
         MOVE G6A, 106,  76, 146,  93,  96
         MOVE G6D,  88,  71, 152,  91, 106
         MOVE G6B, 100,35
         MOVE G6C, 100,35
         WAIT
         SPEED 3
-        'GOSUB ±âº»ÀÚ¼¼
+        'GOSUB ê¸°ë³¸ìžì„¸
         GOSUB Leg_motor_mode1
         RETURN
     ENDIF
 
-ÀüÁøÈ½¼öº¸Çà50_2:
+ì „ì§„íšŸìˆ˜ë³´í–‰50_2:
 
-    ¹Ýº¹È½¼ö = ¹Ýº¹È½¼ö + 1
+    ë°˜ë³µíšŸìˆ˜ = ë°˜ë³µíšŸìˆ˜ + 1
     SPEED 10
-    '¿À¸¥¹ß»»¾îÂøÁö
+    'ì˜¤ë¥¸ë°œë»£ì–´ì°©ì§€
     MOVE G6D,85,  44, 163, 113, 114
     MOVE G6A,110,  77, 146,  93,  94
     WAIT
     SPEED 4
-    '¿À¸¥¹ßÁß½ÉÀÌµ¿
+    'ì˜¤ë¥¸ë°œì¤‘ì‹¬ì´ë™
     MOVE G6D,110,  76, 144, 100,  93
     MOVE G6A, 85, 93, 155,  71, 112
     WAIT
-    SPEED 10     '¿Þ¹ßµé±â10
+    SPEED 10     'ì™¼ë°œë“¤ê¸°10
     MOVE G6A, 90, 100, 105, 110, 114
     MOVE G6D,111,  77, 146,  93,  94
     MOVE G6B, 90
     MOVE G6C,110
     WAIT
-    IF ¹Ýº¹È½¼ö >= º¸ÇàÈ½¼ö THEN
+    IF ë°˜ë³µíšŸìˆ˜ >= ë³´í–‰íšŸìˆ˜ THEN
         HIGHSPEED SETOFF
         SPEED 5
-        '¿À¸¥ÂÊ±â¿ï±â2
+        'ì˜¤ë¥¸ìª½ê¸°ìš¸ê¸°2
         MOVE G6D, 106,  76, 146,  93,  96
         MOVE G6A,  88,  71, 152,  91, 106
         MOVE G6C, 100,35
         MOVE G6B, 100,35
         WAIT
         SPEED 3
-        'GOSUB ±âº»ÀÚ¼¼
+        'GOSUB ê¸°ë³¸ìžì„¸
         GOSUB Leg_motor_mode1
         RETURN
     ENDIF
-    GOTO ÀüÁøÈ½¼öº¸Çà50_1
+    GOTO ì „ì§„íšŸìˆ˜ë³´í–‰50_1
 
-Àâ°íº¸Çà50:
-    ³Ñ¾îÁøÈ®ÀÎ = 0
-    ¹Ýº¹È½¼ö = 0
+ìž¡ê³ ë³´í–‰50:
+    ë„˜ì–´ì§„í™•ì¸ = 0
+    ë°˜ë³µíšŸìˆ˜ = 0
     GOSUB Leg_motor_mode3
-    IF º¸Çà¼ø¼­ = 0 THEN
-        º¸Çà¼ø¼­ = 1
-        SPEED 3         '¿À¸¥ÂÊ±â¿ï±â
+    IF ë³´í–‰ìˆœì„œ = 0 THEN
+        ë³´í–‰ìˆœì„œ = 1
+        SPEED 3         'ì˜¤ë¥¸ìª½ê¸°ìš¸ê¸°
         MOVE G6A, 88,  71, 152,  81, 110
         MOVE G6D,108,  76, 146,  83,  94
         
         WAIT
-        SPEED 10'º¸Çà¼Óµµ         '¿Þ¹ßµé±â
+        SPEED 10'ë³´í–‰ì†ë„         'ì™¼ë°œë“¤ê¸°
         MOVE G6A, 90, 100, 115, 95, 114
         MOVE G6D,113,  78, 146,  83,  94
         WAIT
-        GOTO Àâ°íº¸Çà50_1
+        GOTO ìž¡ê³ ë³´í–‰50_1
     ELSE
-        º¸Çà¼ø¼­ = 0
-        SPEED 3         '¿ÞÂÊ±â¿ï±â
+        ë³´í–‰ìˆœì„œ = 0
+        SPEED 3         'ì™¼ìª½ê¸°ìš¸ê¸°
         MOVE G6D,  88,  71, 152,  81, 110
         MOVE G6A, 108,  76, 146,  83,  94
         WAIT
-        SPEED 10'º¸Çà¼Óµµ         '¿À¸¥¹ßµé±â
+        SPEED 10'ë³´í–‰ì†ë„         'ì˜¤ë¥¸ë°œë“¤ê¸°
         MOVE G6D, 90, 100, 115, 95, 114
         MOVE G6A,113,  78, 146,  83,  94
         WAIT
-        GOTO Àâ°íº¸Çà50_2
+        GOTO ìž¡ê³ ë³´í–‰50_2
     ENDIF
 
-Àâ°íº¸Çà50_1:
-    ¹Ýº¹È½¼ö = ¹Ýº¹È½¼ö + 1
+ìž¡ê³ ë³´í–‰50_1:
+    ë°˜ë³µíšŸìˆ˜ = ë°˜ë³µíšŸìˆ˜ + 1
     SPEED 10
-    '¿Þ¹ß»»¾îÂøÁö
+    'ì™¼ë°œë»£ì–´ì°©ì§€
     MOVE G6A, 85,  44, 163, 103, 114
     MOVE G6D,110,  77, 146,  83,  94
     WAIT
-    SPEED 4     '¿Þ¹ßÁß½ÉÀÌµ¿
+    SPEED 4     'ì™¼ë°œì¤‘ì‹¬ì´ë™
     MOVE G6A,110,  76, 144, 90,  93
     MOVE G6D,85, 93, 155,  61, 112
     WAIT
-    SPEED 10     '¿À¸¥¹ßµé±â10
+    SPEED 10     'ì˜¤ë¥¸ë°œë“¤ê¸°10
     MOVE G6A,111,  77, 146,  83, 94
     MOVE G6D,90, 100, 105, 100, 114
     WAIT
-    IF ¹Ýº¹È½¼ö >= º¸ÇàÈ½¼ö THEN
+    IF ë°˜ë³µíšŸìˆ˜ >= ë³´í–‰íšŸìˆ˜ THEN
         HIGHSPEED SETOFF
         SPEED 5
-        '¿ÞÂÊ±â¿ï±â2
+        'ì™¼ìª½ê¸°ìš¸ê¸°2
         MOVE G6A, 106,  76, 146,  83,  96
         MOVE G6D,  88,  71, 152,  81, 106
         WAIT
         SPEED 3
-        'GOSUB ±âº»ÀÚ¼¼
+        'GOSUB ê¸°ë³¸ìžì„¸
         GOSUB Leg_motor_mode1
         RETURN
     ENDIF
 
-Àâ°íº¸Çà50_2:
+ìž¡ê³ ë³´í–‰50_2:
 
-    ¹Ýº¹È½¼ö = ¹Ýº¹È½¼ö + 1
+    ë°˜ë³µíšŸìˆ˜ = ë°˜ë³µíšŸìˆ˜ + 1
     SPEED 10
-    '¿À¸¥¹ß»»¾îÂøÁö
+    'ì˜¤ë¥¸ë°œë»£ì–´ì°©ì§€
     MOVE G6D,85,  44, 163, 103, 114
     MOVE G6A,110,  77, 146,  83,  94
     WAIT
     SPEED 4
-    '¿À¸¥¹ßÁß½ÉÀÌµ¿
+    'ì˜¤ë¥¸ë°œì¤‘ì‹¬ì´ë™
     MOVE G6D,110,  76, 144, 90,  93
     MOVE G6A, 85, 93, 155,  61, 112
     WAIT
-    SPEED 10     '¿Þ¹ßµé±â10
+    SPEED 10     'ì™¼ë°œë“¤ê¸°10
     MOVE G6A, 90, 100, 105, 100, 114
     MOVE G6D,111,  77, 146,  83,  94
     WAIT
-    IF ¹Ýº¹È½¼ö >= º¸ÇàÈ½¼ö THEN
+    IF ë°˜ë³µíšŸìˆ˜ >= ë³´í–‰íšŸìˆ˜ THEN
         HIGHSPEED SETOFF
         SPEED 5
-        '¿À¸¥ÂÊ±â¿ï±â2
+        'ì˜¤ë¥¸ìª½ê¸°ìš¸ê¸°2
         MOVE G6D, 106,  76, 146,  83,  96
         MOVE G6A,  88,  71, 152,  81, 106
         WAIT
         SPEED 3
-        'GOSUB ±âº»ÀÚ¼¼
+        'GOSUB ê¸°ë³¸ìžì„¸
         GOSUB Leg_motor_mode1
         RETURN
     ENDIF
-    GOTO Àâ°íº¸Çà50_1
+    GOTO ìž¡ê³ ë³´í–‰50_1
 
 
-ÀüÁøÁ¾Á¾°ÉÀ½:
+ì „ì§„ì¢…ì¢…ê±¸ìŒ:
     GOSUB All_motor_mode3
-    º¸ÇàCOUNT = 0
+    ë³´í–‰COUNT = 0
     SPEED 4
     HIGHSPEED SETON
 
 
-    IF º¸Çà¼ø¼­ = 0 THEN
-        º¸Çà¼ø¼­ = 1
+    IF ë³´í–‰ìˆœì„œ = 0 THEN
+        ë³´í–‰ìˆœì„œ = 1
         MOVE G6A,95,  76, 147,  93, 101
         MOVE G6D,101,  76, 147,  93, 98
         MOVE G6B,100
         MOVE G6C,100
         WAIT
 
-        GOTO ÀüÁøÁ¾Á¾°ÉÀ½_1
+        GOTO ì „ì§„ì¢…ì¢…ê±¸ìŒ_1
     ELSE
-        º¸Çà¼ø¼­ = 0
+        ë³´í–‰ìˆœì„œ = 0
         MOVE G6D,95,  76, 147,  93, 101
         MOVE G6A,101,  76, 147,  93, 98
         MOVE G6B,100
         MOVE G6C,100
         WAIT
 
-        GOTO ÀüÁøÁ¾Á¾°ÉÀ½_4
+        GOTO ì „ì§„ì¢…ì¢…ê±¸ìŒ_4
     ENDIF
 
 
     '**********************
 
-ÀüÁøÁ¾Á¾°ÉÀ½_1:
+ì „ì§„ì¢…ì¢…ê±¸ìŒ_1:
     MOVE G6A,95,  90, 125, 100, 104
     MOVE G6D,104,  77, 147,  93,  102
     MOVE G6B, 85
@@ -1039,7 +1053,7 @@ South:
     WAIT
 
 
-ÀüÁøÁ¾Á¾°ÉÀ½_2:
+ì „ì§„ì¢…ì¢…ê±¸ìŒ_2:
 
     MOVE G6A,103,   73, 140, 103,  100
     MOVE G6D, 95,  85, 147,  85, 102
@@ -1047,11 +1061,11 @@ South:
 
 
 
-    ' º¸ÇàCOUNT = º¸ÇàCOUNT + 1
-    'IF º¸ÇàCOUNT > º¸ÇàÈ½¼ö THEN  GOTO ÀüÁøÁ¾Á¾°ÉÀ½_2_stop
+    ' ë³´í–‰COUNT = ë³´í–‰COUNT + 1
+    'IF ë³´í–‰COUNT > ë³´í–‰íšŸìˆ˜ THEN  GOTO ì „ì§„ì¢…ì¢…ê±¸ìŒ_2_stop
 
 
-ÀüÁøÁ¾Á¾°ÉÀ½_2_stop:
+ì „ì§„ì¢…ì¢…ê±¸ìŒ_2_stop:
         MOVE G6D,95,  90, 125, 95, 104
         MOVE G6A,104,  76, 145,  91,  102
         MOVE G6C, 100
@@ -1059,9 +1073,9 @@ South:
         WAIT
         HIGHSPEED SETOFF
         SPEED 15
-        GOSUB ¾ÈÁ¤È­ÀÚ¼¼
+        GOSUB ì•ˆì •í™”ìžì„¸
         SPEED 5
-        GOSUB ±âº»ÀÚ¼¼2
+        GOSUB ê¸°ë³¸ìžì„¸2
         DELAY 300
 
 	RETURN
@@ -1069,7 +1083,7 @@ South:
 
     '*********************************
 
-ÀüÁøÁ¾Á¾°ÉÀ½_4:
+ì „ì§„ì¢…ì¢…ê±¸ìŒ_4:
     MOVE G6D,95,  95, 120, 100, 104
     MOVE G6A,104,  77, 147,  93,  102
     MOVE G6C, 85
@@ -1077,16 +1091,16 @@ South:
     WAIT
 
 
-ÀüÁøÁ¾Á¾°ÉÀ½_5:
+ì „ì§„ì¢…ì¢…ê±¸ìŒ_5:
     MOVE G6D,103,    73, 140, 103,  100
     MOVE G6A, 95,  85, 147,  85, 102
     WAIT
 
 
-    ' º¸ÇàCOUNT = º¸ÇàCOUNT + 1
-    ' IF º¸ÇàCOUNT > º¸ÇàÈ½¼ö THEN  GOTO ÀüÁøÁ¾Á¾°ÉÀ½_5_stop
+    ' ë³´í–‰COUNT = ë³´í–‰COUNT + 1
+    ' IF ë³´í–‰COUNT > ë³´í–‰íšŸìˆ˜ THEN  GOTO ì „ì§„ì¢…ì¢…ê±¸ìŒ_5_stop
 
-ÀüÁøÁ¾Á¾°ÉÀ½_5_stop:
+ì „ì§„ì¢…ì¢…ê±¸ìŒ_5_stop:
         MOVE G6A,95,  90, 125, 95, 104
         MOVE G6D,104,  76, 145,  91,  102
         MOVE G6B, 100
@@ -1094,45 +1108,45 @@ South:
         WAIT
         HIGHSPEED SETOFF
         SPEED 15
-        GOSUB ¾ÈÁ¤È­ÀÚ¼¼
+        GOSUB ì•ˆì •í™”ìžì„¸
         SPEED 5
-        GOSUB ±âº»ÀÚ¼¼2
+        GOSUB ê¸°ë³¸ìžì„¸2
 		DELAY 300
 
 	RETURN
 
 
 
-È½¼ö_ÀüÁøÁ¾Á¾°ÉÀ½:
+íšŸìˆ˜_ì „ì§„ì¢…ì¢…ê±¸ìŒ:
     GOSUB All_motor_mode3
-    º¸ÇàCOUNT = 0
+    ë³´í–‰COUNT = 0
     SPEED 8
 
 
-    IF º¸Çà¼ø¼­ = 0 THEN
-        º¸Çà¼ø¼­ = 1
+    IF ë³´í–‰ìˆœì„œ = 0 THEN
+        ë³´í–‰ìˆœì„œ = 1
         MOVE G6A,95,  76, 147,  93, 101
         MOVE G6D,101,  76, 147,  93, 98
         MOVE G6B,100
         MOVE G6C,100
         WAIT
 
-        GOTO È½¼ö_ÀüÁøÁ¾Á¾°ÉÀ½_1
+        GOTO íšŸìˆ˜_ì „ì§„ì¢…ì¢…ê±¸ìŒ_1
     ELSE
-        º¸Çà¼ø¼­ = 0
+        ë³´í–‰ìˆœì„œ = 0
         MOVE G6D,95,  76, 147,  93, 101
         MOVE G6A,101,  76, 147,  93, 98
         MOVE G6B,100
         MOVE G6C,100
         WAIT
 
-        GOTO È½¼ö_ÀüÁøÁ¾Á¾°ÉÀ½_4
+        GOTO íšŸìˆ˜_ì „ì§„ì¢…ì¢…ê±¸ìŒ_4
     ENDIF
 
 
     '**********************
 
-È½¼ö_ÀüÁøÁ¾Á¾°ÉÀ½_1:
+íšŸìˆ˜_ì „ì§„ì¢…ì¢…ê±¸ìŒ_1:
     MOVE G6A,95,  90, 125, 100, 104
     MOVE G6D,104,  77, 147,  93,  102
     MOVE G6B, 85
@@ -1140,7 +1154,7 @@ South:
     WAIT
 
 
-È½¼ö_ÀüÁøÁ¾Á¾°ÉÀ½_2:
+íšŸìˆ˜_ì „ì§„ì¢…ì¢…ê±¸ìŒ_2:
 
     MOVE G6A,103,   73, 140, 103,  100
     MOVE G6D, 95,  85, 147,  85, 102
@@ -1148,8 +1162,8 @@ South:
 
   
 
-    º¸ÇàCOUNT = º¸ÇàCOUNT + 1
-    IF º¸ÇàCOUNT > º¸ÇàÈ½¼ö THEN
+    ë³´í–‰COUNT = ë³´í–‰COUNT + 1
+    IF ë³´í–‰COUNT > ë³´í–‰íšŸìˆ˜ THEN
         MOVE G6D,95,  90, 125, 95, 104
         MOVE G6A,104,  76, 145,  91,  102
         MOVE G6C, 100
@@ -1157,9 +1171,9 @@ South:
         WAIT
         HIGHSPEED SETOFF
         SPEED 15
-        GOSUB ¾ÈÁ¤È­ÀÚ¼¼
+        GOSUB ì•ˆì •í™”ìžì„¸
         SPEED 5
-        GOSUB ±âº»ÀÚ¼¼2
+        GOSUB ê¸°ë³¸ìžì„¸2
 
         'DELAY 400
         RETURN
@@ -1167,7 +1181,7 @@ South:
 
     '*********************************
 
-È½¼ö_ÀüÁøÁ¾Á¾°ÉÀ½_4:
+íšŸìˆ˜_ì „ì§„ì¢…ì¢…ê±¸ìŒ_4:
     MOVE G6D,95,  95, 120, 100, 104
     MOVE G6A,104,  77, 147,  93,  102
     MOVE G6C, 85
@@ -1175,15 +1189,15 @@ South:
     WAIT
 
 
-È½¼ö_ÀüÁøÁ¾Á¾°ÉÀ½_5:
+íšŸìˆ˜_ì „ì§„ì¢…ì¢…ê±¸ìŒ_5:
     MOVE G6D,103,    73, 140, 103,  100
     MOVE G6A, 95,  85, 147,  85, 102
     WAIT
 
 
     
-    º¸ÇàCOUNT = º¸ÇàCOUNT + 1
-    IF º¸ÇàCOUNT > º¸ÇàÈ½¼ö THEN
+    ë³´í–‰COUNT = ë³´í–‰COUNT + 1
+    IF ë³´í–‰COUNT > ë³´í–‰íšŸìˆ˜ THEN
         MOVE G6A,95,  90, 125, 95, 104
         MOVE G6D,104,  76, 145,  91,  102
         MOVE G6B, 100
@@ -1191,9 +1205,9 @@ South:
         WAIT
         HIGHSPEED SETOFF
         SPEED 15
-        GOSUB ¾ÈÁ¤È­ÀÚ¼¼
+        GOSUB ì•ˆì •í™”ìžì„¸
         SPEED 5
-        GOSUB ±âº»ÀÚ¼¼2
+        GOSUB ê¸°ë³¸ìžì„¸2
 
         'DELAY 400
         RETURN
@@ -1203,7 +1217,7 @@ South:
 
     '*********************************
 
-    GOTO È½¼ö_ÀüÁøÁ¾Á¾°ÉÀ½_1
+    GOTO íšŸìˆ˜_ì „ì§„ì¢…ì¢…ê±¸ìŒ_1
 
     '******************************************
 
@@ -1212,38 +1226,38 @@ South:
 
 
     '*********************************************
-ÈÄÁøÁ¾Á¾°ÉÀ½:
+í›„ì§„ì¢…ì¢…ê±¸ìŒ:
     GOSUB All_motor_mode3
-    ³Ñ¾îÁøÈ®ÀÎ = 0
-    º¸ÇàCOUNT = 0
+    ë„˜ì–´ì§„í™•ì¸ = 0
+    ë³´í–‰COUNT = 0
     SPEED 7
     HIGHSPEED SETON
 
 
-    IF º¸Çà¼ø¼­ = 0 THEN
-        º¸Çà¼ø¼­ = 1
+    IF ë³´í–‰ìˆœì„œ = 0 THEN
+        ë³´í–‰ìˆœì„œ = 1
         MOVE G6A,95,  76, 145,  93, 101
         MOVE G6D,101,  76, 145,  93, 98
         MOVE G6B,100
         MOVE G6C,100
         WAIT
 
-        GOSUB ÈÄÁøÁ¾Á¾°ÉÀ½_1
+        GOSUB í›„ì§„ì¢…ì¢…ê±¸ìŒ_1
     ELSE
-        º¸Çà¼ø¼­ = 0
+        ë³´í–‰ìˆœì„œ = 0
         MOVE G6D,95,  76, 145,  93, 101
         MOVE G6A,101,  76, 145,  93, 98
         MOVE G6B,100
         MOVE G6C,100
         WAIT
 
-        GOSUB ÈÄÁøÁ¾Á¾°ÉÀ½_4
+        GOSUB í›„ì§„ì¢…ì¢…ê±¸ìŒ_4
         
         RETURN
     ENDIF
 
 
-ÈÄÁøÁ¾Á¾°ÉÀ½_1:
+í›„ì§„ì¢…ì¢…ê±¸ìŒ_1:
     MOVE G6D,104,  76, 147,  93,  101
     MOVE G6A,95,  95, 120, 95, 114
     MOVE G6B,115
@@ -1251,7 +1265,7 @@ South:
     WAIT
     RETURN
 
-ÈÄÁøÁ¾Á¾°ÉÀ½_4:
+í›„ì§„ì¢…ì¢…ê±¸ìŒ_4:
     MOVE G6A,104,  76, 147, 93,  101
     MOVE G6D,95,  95, 120, 95, 114
     MOVE G6C,115
@@ -1259,7 +1273,7 @@ South:
     WAIT
     RETURN
     
-Áý°í¿À¸¥ÂÊÅÏ60:
+ì§‘ê³ ì˜¤ë¥¸ìª½í„´60:
 
     SPEED 15
     MOVE G6A,95,  36, 145,  125, 105, 100
@@ -1276,7 +1290,7 @@ South:
     MOVE G6D,100,  76, 145,  85, 100
     WAIT
     RETURN
-Áý°í¿À¸¥ÂÊÅÏ45:
+ì§‘ê³ ì˜¤ë¥¸ìª½í„´45:
 
     SPEED 8
     MOVE G6A,95,  46, 145,  115, 105, 100
@@ -1294,8 +1308,8 @@ South:
     WAIT
     
 
-¿ÞÂÊÅÏ10:
-    ³Ñ¾îÁøÈ®ÀÎ = 0
+ì™¼ìª½í„´10:
+    ë„˜ì–´ì§„í™•ì¸ = 0
     MOTORMODE G6A,3,3,3,3,2
     MOTORMODE G6D,3,3,3,3,2
     SPEED 2
@@ -1316,8 +1330,8 @@ South:
     RETURN
 
     '**********************************************
-¿À¸¥ÂÊÅÏ10:
-    ³Ñ¾îÁøÈ®ÀÎ = 0
+ì˜¤ë¥¸ìª½í„´10:
+    ë„˜ì–´ì§„í™•ì¸ = 0
     MOTORMODE G6A,3,3,3,3,2
     MOTORMODE G6D,3,3,3,3,2
     SPEED 2
@@ -1341,7 +1355,7 @@ South:
 
 
     '**********************************************
-¿ÞÂÊÅÏ90:
+ì™¼ìª½í„´90:
     GOSUB Leg_motor_mode2
     SPEED 8
     MOVE G6A,95,  106, 145,  63, 105, 100
@@ -1356,10 +1370,10 @@ South:
     WAIT
 
     SPEED 8
-    GOSUB ±âº»ÀÚ¼¼
+    GOSUB ê¸°ë³¸ìžì„¸
     GOSUB Leg_motor_mode1
 
-    'ÇÑ¹ø ´õ
+    'í•œë²ˆ ë”
     GOSUB Leg_motor_mode2
     SPEED 8
     MOVE G6A,95,  106, 145,  63, 105, 100
@@ -1374,13 +1388,13 @@ South:
     WAIT
 
     SPEED 8
-    GOSUB ±âº»ÀÚ¼¼
+    GOSUB ê¸°ë³¸ìžì„¸
     GOSUB Leg_motor_mode1
     
     RETURN
 
     '**********************************************
-¿À¸¥ÂÊÅÏ90:
+ì˜¤ë¥¸ìª½í„´90:
     GOSUB Leg_motor_mode2
     SPEED 8
     MOVE G6A,95,  46, 145,  123, 105, 100
@@ -1395,10 +1409,10 @@ South:
     WAIT
 
     SPEED 8
-    GOSUB ±âº»ÀÚ¼¼
+    GOSUB ê¸°ë³¸ìžì„¸
     GOSUB Leg_motor_mode1
 
-    'ÇÑ¹ø ´õ
+    'í•œë²ˆ ë”
 	GOSUB Leg_motor_mode2
     SPEED 8
     MOVE G6A,95,  46, 145,  123, 105, 100
@@ -1415,8 +1429,8 @@ South:
 	RETURN
     '**********************************************
 
-¿¬¼Ó¿À¸¥ÂÊ¿·À¸·Î70:
-    ³Ñ¾îÁøÈ®ÀÎ = 0
+ì—°ì†ì˜¤ë¥¸ìª½ì˜†ìœ¼ë¡œ70:
+    ë„˜ì–´ì§„í™•ì¸ = 0
     SPEED 7
     MOVE G6D, 90,  90, 120, 105, 110, 100
     MOVE G6A,100,  76, 146,  93, 107, 100
@@ -1438,8 +1452,8 @@ South:
     DELAY 300
     RETURN
     '*************
-¿¬¼Ó¿ÞÂÊ¿·À¸·Î70:
-    ³Ñ¾îÁøÈ®ÀÎ = 0
+ì—°ì†ì™¼ìª½ì˜†ìœ¼ë¡œ70:
+    ë„˜ì–´ì§„í™•ì¸ = 0
     SPEED 7
     MOVE G6A, 90,  90, 120, 105, 110, 100
     MOVE G6D,100,  76, 146,  93, 107, 100
@@ -1479,8 +1493,8 @@ Leg_motor_mode1:
     MOTORMODE G6A,1,1,1,1,1
     MOTORMODE G6D,1,1,1,1,1
     RETURN
-    '*******±âº»ÀÚ¼¼°ü·Ã********************
-±âº»ÀÚ¼¼:
+    '*******ê¸°ë³¸ìžì„¸ê´€ë ¨********************
+ê¸°ë³¸ìžì„¸:
     MOVE G6A,100,  76, 145,  93, 100, 100
     MOVE G6D,100,  76, 145,  93, 100, 100
     MOVE G6B,100,  30,  80, 100, 100, 100
@@ -1488,7 +1502,7 @@ Leg_motor_mode1:
     WAIT
     RETURN
     '*************************************
-±âº»ÀÚ¼¼2:
+ê¸°ë³¸ìžì„¸2:
     MOVE G6A,100,  76, 145,  93, 100, 100
     MOVE G6D,100,  76, 145,  93, 100, 100
     MOVE G6B,100,  30,  80,
@@ -1497,7 +1511,7 @@ Leg_motor_mode1:
 
     mode = 0
     RETURN
-MOTOR_ON: 'ÀüÆ÷Æ®¼­º¸¸ðÅÍ»ç¿ë¼³Á¤
+MOTOR_ON: 'ì „í¬íŠ¸ì„œë³´ëª¨í„°ì‚¬ìš©ì„¤ì •
 
     GOSUB MOTOR_GET
 
@@ -1509,24 +1523,24 @@ MOTOR_ON: 'ÀüÆ÷Æ®¼­º¸¸ðÅÍ»ç¿ë¼³Á¤
     DELAY 50
     MOTOR G6D
 
-    ¸ðÅÍONOFF = 0
-    GOSUB ½ÃÀÛÀ½	
+    ëª¨í„°ONOFF = 0
+    GOSUB ì‹œìž‘ìŒ	
     RETURN
 
     '************************************************
-    'ÀüÆ÷Æ®¼­º¸¸ðÅÍ»ç¿ë¼³Á¤
+    'ì „í¬íŠ¸ì„œë³´ëª¨í„°ì‚¬ìš©ì„¤ì •
 MOTOR_OFF:
 
     MOTOROFF G6B
     MOTOROFF G6C
     MOTOROFF G6A
     MOTOROFF G6D
-    ¸ðÅÍONOFF = 1	
+    ëª¨í„°ONOFF = 1	
     GOSUB MOTOR_GET	
-    GOSUB Á¾·áÀ½	
+    GOSUB ì¢…ë£ŒìŒ	
     RETURN
     '************************************************
-    'À§Ä¡°ªÇÇµå¹é
+    'ìœ„ì¹˜ê°’í”¼ë“œë°±
 MOTOR_GET:
     GETMOTORSET G6A,1,1,1,1,1,0
     GETMOTORSET G6B,1,1,1,0,0,1
@@ -1535,7 +1549,7 @@ MOTOR_GET:
     RETURN
 
     '************************************************
-    'À§Ä¡°ªÇÇµå¹é
+    'ìœ„ì¹˜ê°’í”¼ë“œë°±
 MOTOR_SET:
     GETMOTORSET G6A,1,1,1,1,1,0
     GETMOTORSET G6B,1,1,1,0,0,1
@@ -1587,7 +1601,7 @@ SOUND_PLAY_CHK:
     RETURN
     '************************************************
 
-Àü¿øÃÊ±âÀÚ¼¼:
+ì „ì›ì´ˆê¸°ìžì„¸:
     MOVE G6A,100,  76, 145,  93, 100, 100
     MOVE G6D,100,  76, 145,  93, 100, 100
     MOVE G6B,100,  35,  90,
@@ -1596,7 +1610,7 @@ SOUND_PLAY_CHK:
     mode = 0
     RETURN
     '************************************************
-¾ÈÁ¤È­ÀÚ¼¼:
+ì•ˆì •í™”ìžì„¸:
     MOVE G6A,98,  76, 145,  93, 101, 100
     MOVE G6D,98,  76, 145,  93, 101, 100
     MOVE G6B,100,  35,  90,
@@ -1605,8 +1619,8 @@ SOUND_PLAY_CHK:
     mode = 0
 
     RETURN
-    '**** ÀÚÀÌ·Î°¨µµ ¼³Á¤ ****
-ÀÚÀÌ·ÎINIT:
+    '**** ìžì´ë¡œê°ë„ ì„¤ì • ****
+ìžì´ë¡œINIT:
 
     GYRODIR G6A, 0, 0, 1, 0,0
     GYRODIR G6D, 1, 0, 1, 0,0
@@ -1616,64 +1630,64 @@ SOUND_PLAY_CHK:
 
     RETURN
     '***********************************************
-    '**** ÀÚÀÌ·Î°¨µµ ¼³Á¤ ****
-ÀÚÀÌ·ÎMAX:
+    '**** ìžì´ë¡œê°ë„ ì„¤ì • ****
+ìžì´ë¡œMAX:
 
     GYROSENSE G6A,250,180,30,180,0
     GYROSENSE G6D,250,180,30,180,0
 
     RETURN
     '***********************************************
-ÀÚÀÌ·ÎMID:
+ìžì´ë¡œMID:
 
     GYROSENSE G6A,200,150,30,150,0
     GYROSENSE G6D,200,150,30,150,0
 
     RETURN
     '***********************************************
-ÀÚÀÌ·ÎMIN:
+ìžì´ë¡œMIN:
 
     GYROSENSE G6A,200,100,30,100,0
     GYROSENSE G6D,200,100,30,100,0
     RETURN
     '***********************************************
-ÀÚÀÌ·ÎON:
+ìžì´ë¡œON:
 
     GYROSET G6A, 4, 3, 3, 3, 0
     GYROSET G6D, 4, 3, 3, 3, 0
 
-    ÀÚÀÌ·ÎONOFF = 1
+    ìžì´ë¡œONOFF = 1
 
     RETURN
     '***********************************************
-ÀÚÀÌ·ÎOFF:
+ìžì´ë¡œOFF:
 
     GYROSET G6A, 0, 0, 0, 0, 0
     GYROSET G6D, 0, 0, 0, 0, 0
-    ÀÚÀÌ·ÎONOFF = 0
+    ìžì´ë¡œONOFF = 0
     RETURN
 
     '************************************************
     '************************************************
-½ÃÀÛÀ½:
+ì‹œìž‘ìŒ:
     TEMPO 220
     MUSIC "O23EAB7EA>3#C"
     RETURN
     '************************************************
-Á¾·áÀ½:
+ì¢…ë£ŒìŒ:
     TEMPO 220
     MUSIC "O38GD<BGD<BG"
     RETURN
-Àû¿Ü¼±°Å¸®¼¾¼­È®ÀÎ:
-    Àû¿Ü¼±°Å¸®°ª = AD(Àû¿Ü¼±ADÆ÷Æ®)
-    IF Àû¿Ü¼±°Å¸®°ª > 50 THEN '50 = Àû¿Ü¼±°Å¸®°ª = 25cm
-        dis=Àû¿Ü¼±°Å¸®°ª
+ì ì™¸ì„ ê±°ë¦¬ì„¼ì„œí™•ì¸:
+    ì ì™¸ì„ ê±°ë¦¬ê°’ = AD(ì ì™¸ì„ ADí¬íŠ¸)
+    IF ì ì™¸ì„ ê±°ë¦¬ê°’ > 50 THEN '50 = ì ì™¸ì„ ê±°ë¦¬ê°’ = 25cm
+        dis=ì ì™¸ì„ ê±°ë¦¬ê°’
         MUSIC "C"
         DELAY 200
     ENDIF
 
     RETURN
-°í°³µé±â:
+ê³ ê°œë“¤ê¸°:
     SPEED 2
     MOVE G6C,100,  30,  80, 100, 100, 100
     WAIT
@@ -1682,18 +1696,18 @@ SOUND_PLAY_CHK:
     RETURN
 
     '**************************************************
-µÚ·ÎÀÏ¾î³ª±â:
+ë’¤ë¡œì¼ì–´ë‚˜ê¸°:
 
     HIGHSPEED SETOFF
     PTP SETON 				
     PTP ALLON		
 
-    GOSUB ÀÚÀÌ·ÎOFF
+    GOSUB ìžì´ë¡œOFF
 
     GOSUB All_motor_Reset
 
     SPEED 15
-    GOSUB ±âº»ÀÚ¼¼
+    GOSUB ê¸°ë³¸ìžì„¸
 
     MOVE G6A,90, 130, ,  80, 110, 100
     MOVE G6D,90, 130, 120,  80, 110, 100
@@ -1747,23 +1761,23 @@ SOUND_PLAY_CHK:
     MOVE G6D,100, 150,  33, 140, 100, 100
     WAIT
     SPEED 10
-    GOSUB ±âº»ÀÚ¼¼
+    GOSUB ê¸°ë³¸ìžì„¸
 
-    ³Ñ¾îÁøÈ®ÀÎ = 1
+    ë„˜ì–´ì§„í™•ì¸ = 1
 
     DELAY 200
-    GOSUB ÀÚÀÌ·ÎON
+    GOSUB ìžì´ë¡œON
 
     RETURN
     '**********************************************
-¾ÕÀ¸·ÎÀÏ¾î³ª±â:
+ì•žìœ¼ë¡œì¼ì–´ë‚˜ê¸°:
 
 
     HIGHSPEED SETOFF
     PTP SETON 				
     PTP ALLON
 
-    GOSUB ÀÚÀÌ·ÎOFF
+    GOSUB ìžì´ë¡œOFF
 
     HIGHSPEED SETOFF
 
@@ -1807,58 +1821,58 @@ SOUND_PLAY_CHK:
 
     SPEED 8
     GOSUB All_motor_mode2
-    GOSUB ±âº»ÀÚ¼¼
-    ³Ñ¾îÁøÈ®ÀÎ = 1
+    GOSUB ê¸°ë³¸ìžì„¸
+    ë„˜ì–´ì§„í™•ì¸ = 1
 
     '******************************
     DELAY 200
-    GOSUB ÀÚÀÌ·ÎON
+    GOSUB ìžì´ë¡œON
     RETURN
 
 
-¾ÕµÚ±â¿ï±âÃøÁ¤:
+ì•žë’¤ê¸°ìš¸ê¸°ì¸¡ì •:
     FOR i = 0 TO COUNT_MAX
-        A = AD(¾ÕµÚ±â¿ï±âADÆ÷Æ®)	'±â¿ï±â ¾ÕµÚ
+        A = AD(ì•žë’¤ê¸°ìš¸ê¸°ADí¬íŠ¸)	'ê¸°ìš¸ê¸° ì•žë’¤
         IF A > 250 OR A < 5 THEN RETURN
         IF A > MIN AND A < MAX THEN RETURN
-        DELAY ±â¿ï±âÈ®ÀÎ½Ã°£
+        DELAY ê¸°ìš¸ê¸°í™•ì¸ì‹œê°„
     NEXT i
 
     IF A < MIN THEN
-        GOSUB ±â¿ï±â¾Õ
+        GOSUB ê¸°ìš¸ê¸°ì•ž
     ELSEIF A > MAX THEN
-        GOSUB ±â¿ï±âµÚ
+        GOSUB ê¸°ìš¸ê¸°ë’¤
     ENDIF
 
     RETURN
     '**************************************************
 
-±â¿ï±â¾Õ:
-    A = AD(¾ÕµÚ±â¿ï±âADÆ÷Æ®)
-    'IF A < MIN THEN GOSUB ¾ÕÀ¸·ÎÀÏ¾î³ª±â
+ê¸°ìš¸ê¸°ì•ž:
+    A = AD(ì•žë’¤ê¸°ìš¸ê¸°ADí¬íŠ¸)
+    'IF A < MIN THEN GOSUB ì•žìœ¼ë¡œì¼ì–´ë‚˜ê¸°
     IF A < MIN THEN
         ETX  4800,16
-        GOSUB µÚ·ÎÀÏ¾î³ª±â
+        GOSUB ë’¤ë¡œì¼ì–´ë‚˜ê¸°
 
     ENDIF
     RETURN
 
-±â¿ï±âµÚ:
-    A = AD(¾ÕµÚ±â¿ï±âADÆ÷Æ®)
-    'IF A > MAX THEN GOSUB µÚ·ÎÀÏ¾î³ª±â
+ê¸°ìš¸ê¸°ë’¤:
+    A = AD(ì•žë’¤ê¸°ìš¸ê¸°ADí¬íŠ¸)
+    'IF A > MAX THEN GOSUB ë’¤ë¡œì¼ì–´ë‚˜ê¸°
     IF A > MAX THEN
         ETX  4800,15
-        GOSUB ¾ÕÀ¸·ÎÀÏ¾î³ª±â
+        GOSUB ì•žìœ¼ë¡œì¼ì–´ë‚˜ê¸°
     ENDIF
     RETURN
 
 
-ÁÂ¿ì±â¿ï±âÃøÁ¤:
+ì¢Œìš°ê¸°ìš¸ê¸°ì¸¡ì •:
     FOR i = 0 TO COUNT_MAX
-        B = AD(ÁÂ¿ì±â¿ï±âADÆ÷Æ®)	'±â¿ï±â ÁÂ¿ì
+        B = AD(ì¢Œìš°ê¸°ìš¸ê¸°ADí¬íŠ¸)	'ê¸°ìš¸ê¸° ì¢Œìš°
         IF B > 250 OR B < 5 THEN RETURN
         IF B > MIN AND B < MAX THEN RETURN
-        DELAY ±â¿ï±âÈ®ÀÎ½Ã°£
+        DELAY ê¸°ìš¸ê¸°í™•ì¸ì‹œê°„
     NEXT i
 
     IF B < MIN OR B > MAX THEN
@@ -1866,13 +1880,13 @@ SOUND_PLAY_CHK:
         MOVE G6B,140,  40,  80
         MOVE G6C,140,  40,  80
         WAIT
-        GOSUB ±âº»ÀÚ¼¼	
+        GOSUB ê¸°ë³¸ìžì„¸	
     ENDIF
     RETURN
     '******************************************
 
     '************************************************
-¿ìÀ¯ÆÑÀâ±â:
+ìš°ìœ íŒ©ìž¡ê¸°:
 
     SPEED 5
     MOVE G6A,100,  32, 180,  155, 100
@@ -1880,9 +1894,9 @@ SOUND_PLAY_CHK:
     MOVE G6B,185,  35,  80
     MOVE G6C,185,  35,  80
     WAIT
-    'DELAY 1000 'delay·Î Àá½Ã È®ÀÎ
+    'DELAY 1000 'delayë¡œ ìž ì‹œ í™•ì¸
 
-    'Àâ´Â°£°Ý
+    'ìž¡ëŠ”ê°„ê²©
     MOVE G6B,190,  10,  58
     MOVE G6C,190,  10,  58
     WAIT
@@ -1911,13 +1925,13 @@ SOUND_PLAY_CHK:
     RETURN
 
     '********************************************
-¿ìÀ¯ÆÑ³õ±â:
+ìš°ìœ íŒ©ë†“ê¸°:
 
     SPEED 5
     MOVE G6A,100,  35, 170,  155, 100
     MOVE G6D,100,  35, 170,  155, 100
     WAIT
-    'DELAY 1000 'delay·Î Àá½Ã È®ÀÎ
+    'DELAY 1000 'delayë¡œ ìž ì‹œ í™•ì¸
 
     MOVE G6B,150,  35,  80
     MOVE G6C,150,  35,  80
