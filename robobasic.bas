@@ -763,10 +763,24 @@ South:
     WAIT
     RETURN
     
+방이름_A:
+    PRINT "open 22GongMo.mrs !"
+    PRINT "VOLUME 100 !"
+    PRINT "SND 8 !"
+    GOSUB SOUND_PLAY_CHK
+    RETURN    
+    
 방이름_B:
     PRINT "open 22GongMo.mrs !"
     PRINT "VOLUME 100 !"
     PRINT "SND 9 !"
+    GOSUB SOUND_PLAY_CHK
+    RETURN
+    
+방이름_C:
+    PRINT "open 22GongMo.mrs !"
+    PRINT "VOLUME 100 !"
+    PRINT "SND 10 !"
     GOSUB SOUND_PLAY_CHK
     RETURN
     
